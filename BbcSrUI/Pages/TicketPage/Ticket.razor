@@ -1,0 +1,55 @@
+﻿@page "/Ticket"
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+@inject ITicketsData _db
+
+<h3>Ticket Aperti</h3>
+@if (tickets is null)
+{
+    <p><em>Caricamento...</em></p>
+}
+else
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Create Time</th>
+            <th>Store</th>
+            <th>Description</th>
+            <th>Fault</th>
+            <th>Caller</th>
+            <th>Close Time</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var ticket in tickets)
+        {
+            <tr>
+                <td>@ticket.Id</td>
+                <td>@ticket.CreateTime</td>
+                <td>@ticket.Store</td>
+                <td>@ticket.Description</td>
+                <td>@ticket.Fault</td>
+                <td>@ticket.Caller</td>
+                <td>@ticket.CloseTime</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+
+}
+
+@code {
+    private List<TicketModel> tickets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await _db.GetTicket();
+    }
+}
