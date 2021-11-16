@@ -12,32 +12,19 @@
 }
 else
 {
-    <RadzenDataGrid AllowPaging="true" AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                    PageSize="5" AllowSorting="true" Data="@tickets" TItem="TicketModel" ColumnWidth="150px">
-        <Columns>
-            <RadzenGridColumn TItem="TicketModel" Property="Id" Title="Id"></RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="CreateTime" Title="Create time">
-                <Template Context="data">
-                    @String.Format("{0:d", data.CreateTime)
-                </Template>
-            </RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="Store" Title="Store"></RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="Description" Title="Description"></RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="Fault" Title="Fault"></RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="Caller" Title="Caller"></RadzenGridColumn>
-            <RadzenGridColumn TItem="TicketModel" Property="CloseTime" Title="Close time">
-                <Template Context="data">
-                    @String.Format("{0:d", data.CloseTime)
-                </Template>
-            </RadzenGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-    foreach (var t in tickets)
-    {
-        <p>@t.Id</p>
-    }
-    <RadzenButton style="margin: 0 1rem 1rem 0; width: 200px" Icon="save" BusyText="Saving ..." Text="Save" />
-
+//@dev per maggiori informazioni su come modificare la tabella vai
+//su https://blazor.radzen.com/docs/guides/components/datagrid.html
+<RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel">
+    <Columns>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="CreateTime" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Store" Title="Store" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Fault" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Caller" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="CloseTime" />
+    </Columns>
+</RadzenDataGrid>
 }
 
 
