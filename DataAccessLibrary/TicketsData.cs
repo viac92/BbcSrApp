@@ -25,8 +25,8 @@ namespace DataAccessLibrary
 
         public Task InsertTiket(TicketModel ticket)
         {
-            string sql = @"insert into dbo.Ticket (Store, Description, Fault, Caller)
-                         values (@Store, @Description, @Fault, @Caller);";
+            string sql = @"insert into dbo.Ticket (CreateTime, Store, Description, Fault, Caller, CloseTime)
+                         values (@CreateTime, @Store, @Description, @Fault, @Caller, @CloseTime);";
 
             return _db.SaveDate(sql, ticket);
         }

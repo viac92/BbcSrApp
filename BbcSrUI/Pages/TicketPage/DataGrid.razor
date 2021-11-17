@@ -1,11 +1,11 @@
 ﻿@page "/DataGrid"
 
 @using DataAccessLibrary
-@using DataAccessLibrary.Models
+@using DataAccessLibrary.Models 
 
 @inject ITicketsData _db
 
-<h3>Ticket Aperti</h3>
+<h3 class="m-4">Ticket</h3>
 @if (tickets is null)
 {
     <p><em>Caricamento...</em></p>
@@ -14,23 +14,46 @@ else
 {
 //@dev per maggiori informazioni su come modificare la tabella vai
 //su https://blazor.radzen.com/docs/guides/components/datagrid.html
-<RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel">
+<RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" 
+FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
+AllowColumnResize="true" AllowColumnReorder="true" ColumnWidth="200px">
     <Columns>
         <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="CreateTime" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Store" Title="Store" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Fault" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Caller" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="CloseTime" />
-    </Columns>
+        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Create Time" Reorderable="true">
+            <Template Context="data">
+                @String.Format("{0:d}", data.CreateTime)
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Store" Title="Store" Reorderable="true">
+            <Template Context="data">
+                <p style="white-space:normal">@data.Store</p>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" Resizable="true" Reorderable="true" >
+            <Template Context="data">
+                <p style="white-space:normal">@data.Description</p>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Fault" Reorderable="true">
+            <Template Context="data">
+                <p style="white-space:normal">@data.Fault</p>
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Caller" Reorderable="true"/>
+        <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="Close Time" Reorderable="true">
+            <Template Context="data">
+                @String.Format("{0:d}", data.CloseTime)
+            </Template>
+        </RadzenDataGridColumn>
+</Columns>
 </RadzenDataGrid>
+<br/>
+
 }
 
 
 @code {
     private IEnumerable<TicketModel> tickets;
-
 
     protected override async Task OnInitializedAsync()
     {
