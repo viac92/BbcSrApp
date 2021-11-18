@@ -5,9 +5,21 @@
     ViewData["Title"] = "Accedi";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
+<style>
+.ms-center-page {
+height: 50%;
+margin: 10% 10% 10% 10%;
+}
+.ms-footer {
+    postiion: fixed;
+    bottom: 10px;
+}
+</style>
+
+<div class="ms-center-page">
+<div class="row d-flex justify-content-center align-items-center mt-4" >
+    <div class="col-md-6">
+        <h1>@ViewData["Title"]</h1>
         <section>
             <form id="account" method="post">
                 <h4>Usa il tuo account per accedere al sito.</h4>
@@ -48,6 +60,15 @@
         </section>
     </div>
 </div>
+</div>
+
+<footer class="ms-footer">
+    <div class="col-12 justify-content-center border-top text-center">
+        © 2021 by BBC Technologies s.r.l. via Cimarosa 101, Casalecchio di Reno (BO) - Cap. Soc. € 90.000,00 i. v. - R.E.A. N. 31197 <br />
+                    Codice fiscale e numero d'iscrizione del Registro delle Imprese di Bologna n. 03720160377 <br />
+                    Partita IVA 00653941203
+    </div>
+</footer>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
