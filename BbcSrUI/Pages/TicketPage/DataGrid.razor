@@ -3,7 +3,13 @@
 @using DataAccessLibrary
 @using DataAccessLibrary.Models 
 
+@inject NavigationManager NavManager
 @inject ITicketsData _db
+
+@if (selectedTicket?.Any() == true)
+{
+    NavManager.NavigateTo($"/Ticket/{selectedTicket[0].Id}");
+}
 
 <h3 class="m-4">Ticket</h3>
 @if (tickets is null)
@@ -16,7 +22,7 @@ else
 //su https://blazor.radzen.com/docs/guides/components/datagrid.html
 <RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" 
 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
-AllowColumnResize="true" AllowColumnReorder="true" >
+AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket>
     <Columns>
         <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
         <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Create Time" Reorderable="true">
@@ -49,6 +55,7 @@ AllowColumnResize="true" AllowColumnReorder="true" >
 
 @code {
     private IEnumerable<TicketModel> tickets;
+    private IList<TicketModel> selectedTicket;
 
     protected override async Task OnInitializedAsync()
     {

@@ -1,0 +1,16 @@
+﻿@page "/Ticket/{Id:int}"
+
+<h3>PaginaDettaglio</h3>
+
+
+@code {
+	[Parameter]
+	public int Id { get; set; }
+
+
+	protected override void OnParametersSet()
+{
+    //the param will be set now
+    var test = Id;
+}
+}
