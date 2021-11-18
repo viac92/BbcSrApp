@@ -16,7 +16,7 @@ else
 //su https://blazor.radzen.com/docs/guides/components/datagrid.html
 <RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" 
 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
-AllowColumnResize="true" AllowColumnReorder="true" ColumnWidth="200px">
+AllowColumnResize="true" AllowColumnReorder="true" >
     <Columns>
         <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
         <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Create Time" Reorderable="true">
@@ -29,11 +29,7 @@ AllowColumnResize="true" AllowColumnReorder="true" ColumnWidth="200px">
                 <p style="white-space:normal">@data.Store</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" Resizable="true" Reorderable="true" >
-            <Template Context="data">
-                <p style="white-space:normal">@data.Description</p>
-            </Template>
-        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" Resizable="true" Reorderable="true" />
         <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Fault" Reorderable="true">
             <Template Context="data">
                 <p style="white-space:normal">@data.Fault</p>
@@ -48,7 +44,6 @@ AllowColumnResize="true" AllowColumnReorder="true" ColumnWidth="200px">
 </Columns>
 </RadzenDataGrid>
 <br/>
-
 }
 
 
