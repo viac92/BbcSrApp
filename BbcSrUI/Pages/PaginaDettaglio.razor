@@ -1,16 +1,51 @@
 ﻿@page "/Ticket/{Id:int}"
 
-<h3>PaginaDettaglio</h3>
+@using DataAccessLibrary
+@using DataAccessLibrary.Models 
+
+@inject ITicketsData _db
+
+<h3>Dettaglio Ticket: @Id</h3>
+
+@if (tickets is null)
+{
+    <p><em>Caricamento...</em></p>
+}
+else
+{
+    @foreach (var ticket in tickets)
+    {
+        @if(ticket.Id == Id)
+        {
+            <ul>
+                <li>@ticket.CreateTime</li>
+                <li>@ticket.Store</li>
+                <li>@ticket.Description</li>
+                <li>@ticket.Fault</li>
+                <li>@ticket.Caller</li>
+                <li>@ticket.CloseTime</li>
+            </ul> 
+        }
+    }
+}
+
+
 
 
 @code {
 	[Parameter]
 	public int Id { get; set; }
+    private IEnumerable<TicketModel> tickets;
 
 
 	protected override void OnParametersSet()
-{
+    {
     //the param will be set now
     var test = Id;
-}
+    }
+
+ protected override async Task OnInitializedAsync()
+    {
+        tickets = await _db.GetTicket();
+    }
 }

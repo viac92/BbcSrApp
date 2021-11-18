@@ -6,6 +6,7 @@
 @inject NavigationManager NavManager
 @inject ITicketsData _db
 
+@*mando Id ticket per il routing*@
 @if (selectedTicket?.Any() == true)
 {
     NavManager.NavigateTo($"/Ticket/{selectedTicket[0].Id}");
