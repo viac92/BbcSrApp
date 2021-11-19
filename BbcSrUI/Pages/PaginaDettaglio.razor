@@ -23,11 +23,11 @@ else
                 </div>
                 <div class="col-6 mb-5">
                     <h3><strong>Stato Ticket:</strong></h3>
-                        @if(@ticket.CloseTime == null && @ticket.Caller == null)
+                        @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Caller == null)
                         {
                             <h2><span class="badge badge-danger">Aperto</span></h2>
                         }
-                        else if(@ticket.CloseTime == null)
+                        else if(@ticket.CloseTime == DateTime.MinValue)
                         {
                             <h2><span class="badge badge-warning">In lavorazione</span></h2>
                         }
@@ -80,6 +80,7 @@ else
 @code {
 	[Parameter]
 	public int Id { get; set; }
+
     private IEnumerable<TicketModel> tickets;
 
 
