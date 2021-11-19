@@ -6,74 +6,59 @@
 }
 
 <style>
-.ms-center-page {
-height: 50%;
-margin: 10% 10% 10% 10%;
-}
-.ms-footer {
-    postiion: fixed;
-    bottom: 10px;
-}
+    .ms-center-page {
+        height: 50%;
+        margin: 10% 10% 10% 10%;
+    }
+    .immgaine {
+        width: 80%;
+        height: 80%;
+    }
 </style>
 
-<div class="ms-center-page shadow p-3 mb-5 bg-body rounded">
-    <div class="row d-flex justify-content-center align-items-center mt-4">
-        <div class="col-md-6">
-            <h1>@ViewData["Title"]</h1>
-            <section>
-                <form id="account" method="post">
-                    <h4>Usa il tuo account per accedere al sito.</h4>
-                    <div asp-validation-summary="All" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Input.Email"></label>
-                        <input asp-for="Input.Email" class="form-control" />
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Input.Password"></label>
-                        <input asp-for="Input.Password" class="form-control" />
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="checkbox">
-                            <label asp-for="Input.RememberMe">
-                                <input asp-for="Input.RememberMe" />
-                                @Html.DisplayNameFor(m => m.Input.RememberMe)
-                            </label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Accedi</button>
-                    </div>
-                </form>
-            </section>
-        </div>
-        <div class="col-md-6">
-            <section>
-                <div class="text-center">
-                    <img src="/image/logo.gif" class="col-8 ms-img-min" alt="Logo" />
-                </div>
-                <hr />
-                <p class="text-center">
-                    In questo sito potrai visualizzare i ticket e la loro lavorazione, ricordati che se hai problemi puoi sempre mandarci una a <a href="mailto:helpdesk@bbctech.it">helpdesk@bbctech.it</a> o chiamarci allo <a href="tel:051270394s">051270394</a>.
-                </p>
-            </section>
-        </div>
+
+<div class="row justify-content-center mt-5">
+    <div class="col-4 text-center">
+        <img src="/image/logo.gif" class="immgaine" alt="Logo" />
     </div>
-    <div class="col-12 justify-content-center border-top text-center mt-4">
-        © 2021 by BBC Technologies s.r.l. via Cimarosa 101, Casalecchio di Reno (BO) - Cap. Soc. € 90.000,00 i. v. - R.E.A. N. 31197 <br />
-        Codice fiscale e numero d'iscrizione del Registro delle Imprese di Bologna n. 03720160377 <br />
-        Partita IVA 00653941203
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-5 shadow p-3 bg-body rounded">
+            <div class="col-md-12">
+                <h3>@ViewData["Title"]</h3>
+                <section>
+                    <form id="account" method="post">
+                        <h5>Usa il tuo account per accedere al sito.</h5>
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Input.Email"></label>
+                            <input asp-for="Input.Email" class="form-control" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Input.Password"></label>
+                            <input asp-for="Input.Password" class="form-control" />
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <label asp-for="Input.RememberMe">
+                                    <input asp-for="Input.RememberMe" />
+                                    @Html.DisplayNameFor(m => m.Input.RememberMe)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Accedi</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
     </div>
 </div>
 
-@*<footer class="ms-footer">
-    <div class="col-12 justify-content-center border-top text-center">
-        © 2021 by BBC Technologies s.r.l. via Cimarosa 101, Casalecchio di Reno (BO) - Cap. Soc. € 90.000,00 i. v. - R.E.A. N. 31197 <br />
-                    Codice fiscale e numero d'iscrizione del Registro delle Imprese di Bologna n. 03720160377 <br />
-                    Partita IVA 00653941203
-    </div>
-</footer>*@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
