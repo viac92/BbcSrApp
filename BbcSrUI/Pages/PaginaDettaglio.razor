@@ -5,7 +5,6 @@
 
 @inject ITicketsData _db
 
-<h3>Dettaglio Ticket: @Id</h3>
 
 @if (tickets is null)
 {
@@ -17,14 +16,60 @@ else
     {
         @if(ticket.Id == Id)
         {
-            <ul>
-                <li>@ticket.CreateTime</li>
-                <li>@ticket.Store</li>
-                <li>@ticket.Description</li>
-                <li>@ticket.Fault</li>
-                <li>@ticket.Caller</li>
-                <li>@ticket.CloseTime</li>
-            </ul> 
+            <div class="row rounded bg-light">
+                <div class="col-6 mb-5">
+                    <h3><strong>Dettaglio Ticket:</strong></h3>
+                    <h3>@Id</h3>
+                </div>
+                <div class="col-6 mb-5">
+                    <h3><strong>Stato Ticket:</strong></h3>
+                        @if(@ticket.CloseTime == null && @ticket.Caller == null)
+                        {
+                            <h2><span class="badge badge-danger">Aperto</span></h2>
+                        }
+                        else if(@ticket.CloseTime == null)
+                        {
+                            <h2><span class="badge badge-warning">In lavorazione</span></h2>
+                        }
+                        else 
+                        {
+                            <h2><span class="badge badge-success">Chiuso</span></h2>
+
+                        }
+                </div>
+                <div class="col-6">
+                    <h4>Data apertura ticket:</h4>
+                    <p>@ticket.CreateTime</p>
+                </div>
+                <div class="col-6">
+                    <h4>Store:</h4>
+                    <p>@ticket.Store</p>
+                </div>
+                <div class="col-12">
+                    <h4>Descrizione:</h4>
+                    <p>@ticket.Description</p>
+                </div>
+                <div class="col-6">
+                    <h4>Errore:</h4>
+                    <p>@ticket.Fault</p>
+                </div>
+                <div class="col-6">
+                    <h4>Operatore:</h4>
+                    @if (ticket.Caller == null)
+                    {
+                        <p>Da assegnare</p>
+                    }
+                    else
+                    {
+                        <p>@ticket.Caller</p>
+                    }
+                </div>
+                <div class="col-12">
+                    <h4>Data chiusura ticket:</h4>
+                    <p>@ticket.CloseTime</p>
+                </div>
+            </div>
+      
         }
     }
 }
