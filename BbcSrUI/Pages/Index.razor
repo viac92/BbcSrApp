@@ -1,6 +1,59 @@
 ﻿@page "/"
-    
-<div class="container">
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+
+@inject ITicketsData _db
+
+
+@if (tickets is null)
+{
+    <p><em>Caricamento...</em></p>
+}
+else
+{
+    @foreach (var ticket in tickets)
+    {
+        if (ticket.CloseTime == DateTime.MinValue && ticket.Caller == null)
+        {
+            ticketAperti++;
+        }
+        else if (ticket.CloseTime == DateTime.MinValue)
+        {
+            ticketInLavorazione++;
+        }
+        else
+        {
+            ticketChiusi++;
+        }
+    }
+    @for (int i = 0; i < 3; i++)
+    {
+        situazioneTicket[0] = new TicketStatus { Stato = "Aperto", TotaleTicket = ticketAperti };
+        situazioneTicket[1] = new TicketStatus { Stato = "In lavorazione", TotaleTicket = ticketInLavorazione };
+        situazioneTicket[2] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
+    }
+    <div class="col-12 mb-5">
+        <h1><strong>Home</strong></h1>
+    </div>
+    <div class="col-6 shadow p-3 mb-5 bg-body rounded">
+        <h3>Ticket </h3>
+        <RadzenChart>
+            <RadzenDonutSeries Data="@situazioneTicket" CategoryProperty="Stato" ValueProperty="TotaleTicket">
+                <TitleTemplate>
+                    <div class="rz-donut-content">
+                        <div>Ticket</div>
+                        <div>Status</div>
+                    </div>
+                </TitleTemplate>
+            </RadzenDonutSeries>
+        </RadzenChart>
+    </div>
+}
+
+
+
+@*<div class="container">
     <div class="row justify-content-center">
         <img src="image/logo.gif" class="col-4 ms-img-min" alt="Logo" />
     </div>
@@ -12,4 +65,26 @@
             E-mail: helpdesk@bbctech.it   Commerciale: Tel. 051 232751
         </p>
     </div>
-</div>
+</div>*@
+
+@code {
+    private IEnumerable<TicketModel> tickets;
+
+    private int ticketAperti { get; set; }
+    private int ticketInLavorazione { get; set; }
+    private int ticketChiusi { get; set; }
+
+    class TicketStatus
+    {
+        public string Stato { get; set; }
+        public int TotaleTicket { get; set; }
+    }
+
+    TicketStatus[] situazioneTicket = new TicketStatus[3];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        tickets = await _db.GetTicket();
+    }
+}

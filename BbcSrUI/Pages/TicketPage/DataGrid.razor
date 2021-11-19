@@ -12,7 +12,7 @@
     NavManager.NavigateTo($"/Ticket/{selectedTicket[0].Id}");
 }
 
-<h3 class="m-4">Ticket</h3>
+<h1 class="mb-5 col-12"><strong>Ticket</strong></h1>
 @if (tickets is null)
 {
     <p><em>Caricamento...</em></p>
@@ -26,7 +26,7 @@ FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TI
 AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket>
     <Columns>
         <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Create Time" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Data apertura" Reorderable="true">
             <Template Context="data">
                 @String.Format("{0:d}", data.CreateTime)
             </Template>
@@ -36,16 +36,23 @@ AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelect
                 <p style="white-space:normal">@data.Store</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Description" Resizable="true" Reorderable="true" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Fault" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Descrizione" Resizable="true" Reorderable="true" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Errore" Reorderable="true">
             <Template Context="data">
                 <p style="white-space:normal">@data.Fault</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Caller" Reorderable="true"/>
-        <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="Close Time" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Operatore" Reorderable="true"/>
+        <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="Data chiusura" Reorderable="true">
             <Template Context="data">
-                @String.Format("{0:d}", data.CloseTime)
+                @if (data.CloseTime == DateTime.MinValue)
+                {
+                @String.Format("");
+                }
+                else
+                {
+                @String.Format("{0:d}", data.CloseTime);
+                }
             </Template>
         </RadzenDataGridColumn>
 </Columns>
