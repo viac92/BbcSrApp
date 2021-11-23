@@ -18,17 +18,17 @@ namespace DataAccessLibrary
 
         public Task<List<TicketModel>> GetTicket()
         {
-            string sql = "select * from dbo.Ticket";
+            string sql = "select top 10 * from dbo.Tickets";
 
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }
 
-        public Task InsertTiket(TicketModel ticket)
-        {
-            string sql = @"insert into dbo.Ticket (CreateTime, Store, Description, Fault, Caller, CloseTime)
-                         values (@CreateTime, @Store, @Description, @Fault, @Caller, @CloseTime);";
+        //public Task InsertTiket(TicketModel ticket)
+        //{
+        //    string sql = @"insert into dbo.Ticket (CreateTime, Store, Description, Fault, Caller, CloseTime)
+        //                 values (@CreateTime, @Store, @Description, @Fault, @Caller, @CloseTime);";
 
-            return _db.SaveDate(sql, ticket);
-        }
+        //    return _db.SaveDate(sql, ticket);
+        //}
     }
 }

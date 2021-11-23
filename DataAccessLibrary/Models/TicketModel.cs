@@ -8,12 +8,12 @@ namespace DataAccessLibrary.Models
 {
     public class TicketModel
     {
-        public int Id { get; set; }
-        public DateTime CreateTime { get; set; }
-        public string Store { get; set; }
-        public string Description { get; set; }
-        public string Fault { get; set; }
-        public string Caller { get; set; }
+        public int TicketId { get; set; }
+        public DateTime OpenTime { get; set; }
+        public int SiteId { get; set; }
+        public string Text { get; set; }
+        public string Subject { get; set; }
+        public string Contact { get; set; }
         public DateTime CloseTime { get; set; }
     }
 }

@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    public interface ITicketsData
+    interface IUserData
     {
-        Task<List<TicketModel>> GetTicket();
-        //Task InsertTiket(TicketModel ticket);
+        Task<List<UserModel>> GetUser();
     }
 }
