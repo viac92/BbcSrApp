@@ -14,7 +14,7 @@ else
 {
     @foreach (var ticket in tickets)
     {
-        @if(ticket.Id == Id)
+        @if(ticket.TicketId == Id)
         {
             <div class="row shadow p-3 mb-5 bg-body rounded">
                 <div class="col-6 mb-5">
@@ -23,7 +23,7 @@ else
                 </div>
                 <div class="col-6 mb-5">
                     <h3><strong>Stato Ticket:</strong></h3>
-                        @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Caller == null)
+                        @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Contact == null)
                         {
                             <h2><span class="badge badge-danger">Aperto</span></h2>
                         }
@@ -38,29 +38,29 @@ else
                 </div>
                 <div class="col-6">
                     <h4>Data apertura ticket:</h4>
-                    <p>@ticket.CreateTime</p>
+                    <p>@ticket.OpenTime</p>
                 </div>
                 <div class="col-6">
                     <h4>Store:</h4>
-                    <p>@ticket.Store</p>
+                    <p>@ticket.SiteId</p>
                 </div>
                 <div class="col-12">
                     <h4>Descrizione:</h4>
-                    <p>@ticket.Description</p>
+                    <p>@ticket.Text</p>
                 </div>
                 <div class="col-6">
                     <h4>Errore:</h4>
-                    <p>@ticket.Fault</p>
+                    <p>@ticket.Subject</p>
                 </div>
                 <div class="col-6">
                     <h4>Operatore:</h4>
-                    @if (ticket.Caller == null)
+                    @if (ticket.Contact == null)
                     {
                         <p>Da assegnare</p>
                     }
                     else
                     {
-                        <p>@ticket.Caller</p>
+                        <p>@ticket.Contact</p>
                     }
                 </div>
                 <div class="col-12">

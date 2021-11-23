@@ -9,7 +9,7 @@
 @*mando Id ticket per il routing*@
 @if (selectedTicket?.Any() == true)
 {
-    NavManager.NavigateTo($"/Ticket/{selectedTicket[0].Id}");
+    NavManager.NavigateTo($"/Ticket/{selectedTicket[0].TicketId}");
 }
 
 <h1 class="mb-5 col-12"><strong>Ticket</strong></h1>
@@ -25,24 +25,24 @@ else
 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
 AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket>
     <Columns>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Id" Title="Id" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="CreateTime" Title="Data apertura" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="TicketId" Title="Id" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="OpenTime" Title="Data apertura" Reorderable="true">
             <Template Context="data">
-                @String.Format("{0:d}", data.CreateTime)
+                @String.Format("{0:d}", data.OpenTime)
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Store" Title="Store" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="SiteId" Title="Store" Reorderable="true">
             <Template Context="data">
-                <p style="white-space:normal">@data.Store</p>
+                <p style="white-space:normal">@data.SiteId</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Description" Title="Descrizione" Resizable="true" Reorderable="true" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Fault" Title="Errore" Reorderable="true">
+        <RadzenDataGridColumn TItem="TicketModel" Property="Text" Title="Descrizione" Resizable="true" Reorderable="true" />
+        <RadzenDataGridColumn TItem="TicketModel" Property="Subject" Title="Errore" Reorderable="true">
             <Template Context="data">
-                <p style="white-space:normal">@data.Fault</p>
+                <p style="white-space:normal">@data.Subject</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Caller" Title="Operatore" Reorderable="true"/>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true"/>
         <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="Data chiusura" Reorderable="true">
             <Template Context="data">
                 @if (data.CloseTime == DateTime.MinValue)
