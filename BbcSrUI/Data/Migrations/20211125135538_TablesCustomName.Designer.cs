@@ -4,14 +4,16 @@ using BbcSrUI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BbcSrUI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211125135538_TablesCustomName")]
+    partial class TablesCustomName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +45,7 @@ namespace BbcSrUI.Data.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("TicketRoles");
+                    b.ToTable("MyRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -67,7 +69,7 @@ namespace BbcSrUI.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TicketRoleClaims");
+                    b.ToTable("AspNetRoleClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser", b =>
@@ -136,7 +138,7 @@ namespace BbcSrUI.Data.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("TicketUsers");
+                    b.ToTable("MyUsers");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("IdentityUser");
                 });
@@ -162,7 +164,7 @@ namespace BbcSrUI.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketUserClaims");
+                    b.ToTable("MyUserClaims");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -186,7 +188,7 @@ namespace BbcSrUI.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TicketUserLogins");
+                    b.ToTable("MyUserLogins");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -201,7 +203,7 @@ namespace BbcSrUI.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("TicketUserRoles");
+                    b.ToTable("MyUserRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -222,7 +224,7 @@ namespace BbcSrUI.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("TicketUserTokens");
+                    b.ToTable("AspNetUserTokens");
                 });
 
             modelBuilder.Entity("BbcSrUI.Data.Models.ApplicationUser", b =>
@@ -244,7 +246,7 @@ namespace BbcSrUI.Data.Migrations
                     b.Property<bool>("EnableNewEvent")
                         .HasColumnType("bit");
 
-                    b.ToTable("TicketUsers");
+                    b.ToTable("MyUsers");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
                 });
