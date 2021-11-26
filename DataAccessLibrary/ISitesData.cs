@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    interface IUserData
+    public interface ISitesData
     {
-        Task<List<UserModel>> GetUser();
+        Task<List<SiteModel>> GetSite();
     }
 }

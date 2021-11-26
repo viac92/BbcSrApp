@@ -2,11 +2,17 @@
 
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
+@using Microsoft.AspNetCore.Identity
+@using Data.Models
 
-@inject ITicketsData _db
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<ApplicationUser> UserManager
+@inject ITicketsData _dbTicket
+@inject ISitesData _dbSite
+@inject IBrandsData _dbBrand
 
 
-@if (tickets is null)
+@if (tickets == null && sites == null && brands == null)
 {
     <p><em>Caricamento...</em></p>
 }
@@ -14,17 +20,23 @@ else
 {
     @foreach (var ticket in tickets)
     {
-        if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+        foreach (var site in sites)
         {
-            ticketAperti++;
-        }
-        else if (ticket.CloseTime == DateTime.MinValue)
-        {
-            ticketInLavorazione++;
-        }
-        else
-        {
-            ticketChiusi++;
+            if (userBrandId == site.BrandId)
+            {
+                if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+                {
+                    ticketAperti++;
+                }
+                else if (ticket.CloseTime == DateTime.MinValue)
+                {
+                    ticketInLavorazione++;
+                }
+                else
+                {
+                    ticketChiusi++;
+                }
+            }
         }
     }
     @for (int i = 0; i < 3; i++)
@@ -34,7 +46,7 @@ else
         situazioneTicket[2] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
     }
     <div class="col-12 mb-5">
-        <h1><strong>Home</strong></h1>
+        <h1><strong>Home : @userBrandName</strong></h1>
     </div>
     <div class="col-6 shadow p-3 mb-5 bg-body rounded">
         <h3>Ticket </h3>
@@ -51,28 +63,17 @@ else
     </div>
 }
 
-
-
-@*<div class="container">
-    <div class="row justify-content-center">
-        <img src="image/logo.gif" class="col-4 ms-img-min" alt="Logo" />
-    </div>
-    <div class="row justify-content-center mt-4">
-        <h1 class="col-12 text-left text-center">Benvenuto nell'area assistenza.</h1>
-        <p class="col-12 text-left text-center">
-            Per aprire i ticket potete contattare direttamente i seguenti numeri o mandare un e-mail <br />
-            Tel: 051270394 Fax: 051 5135552 Cell: 3492356330; 3492356332 <br />
-            E-mail: helpdesk@bbctech.it   Commerciale: Tel. 051 232751
-        </p>
-    </div>
-</div>*@
-
 @code {
     private IEnumerable<TicketModel> tickets;
+    private IEnumerable<SiteModel> sites;
+    private IEnumerable<BrandModel> brands;
 
     private int ticketAperti { get; set; }
     private int ticketInLavorazione { get; set; }
     private int ticketChiusi { get; set; }
+
+    private int userBrandId { get; set; }
+    private string userBrandName { get; set; }
 
     class TicketStatus
     {
@@ -85,6 +86,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await _db.GetTicket();
+        tickets = await _dbTicket.GetTicket();
+        sites = await _dbSite.GetSite();
+        brands = await _dbBrand.GetBrand();
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userState = authState.User;
+
+        var user = await UserManager.FindByNameAsync(userState.Identity.Name);
+        userBrandId = user.BrandId;
+        userBrandName = user.UserName;
     }
 }

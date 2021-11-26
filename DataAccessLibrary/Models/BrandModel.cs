@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary.Models
 {
-    class UserModel
+    public class BrandModel
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string CustomerId { get; set; }
         public int BrandId { get; set; }
+        public string Name { get; set; }
     }
 }

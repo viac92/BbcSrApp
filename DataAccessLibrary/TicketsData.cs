@@ -18,7 +18,7 @@ namespace DataAccessLibrary
 
         public Task<List<TicketModel>> GetTicket()
         {
-            string sql = "select top 10 * from dbo.Tickets";
+            string sql = "select * from dbo.Tickets";
 
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }

@@ -7,20 +7,19 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    class UserData : IUserData
+    public class SitesData : ISitesData
     {
         private readonly ISqlDataAccess _db;
-
-        public UserData(ISqlDataAccess db)
+        public SitesData(ISqlDataAccess db)
         {
             _db = db;
         }
 
-        public Task<List<UserModel>> GetUser()
+        public Task<List<SiteModel>> GetSite()
         {
-            string sql = "select * from dbo.WebUsers";
+            string sql = "select * from dbo.Sites";
 
-            return _db.LoadData<UserModel, dynamic>(sql, new { });
+            return _db.LoadData<SiteModel, dynamic>(sql, new { });
         }
     }
 }

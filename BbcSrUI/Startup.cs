@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,8 @@ namespace BbcSrUI
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddTransient<ISqlDataAccess, SqlDataAccess>();
             services.AddTransient<ITicketsData, TicketsData>();
+            services.AddTransient<IBrandsData, BrandsData>();
+            services.AddTransient<ISitesData, SitesData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
