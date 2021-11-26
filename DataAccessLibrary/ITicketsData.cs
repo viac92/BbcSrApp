@@ -8,5 +8,8 @@ namespace DataAccessLibrary
     {
         Task<List<TicketModel>> GetTicket();
         //Task InsertTiket(TicketModel ticket);
+        Task<List<TicketModel>> GetTicketFromSite(IList<int> siteId);
+
+        Task<List<TicketModel>> GetTicketFromBrandId(int brandId);
     }
 }

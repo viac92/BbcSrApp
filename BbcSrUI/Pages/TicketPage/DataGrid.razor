@@ -2,9 +2,14 @@
 
 @using DataAccessLibrary
 @using DataAccessLibrary.Models 
+@using Microsoft.AspNetCore.Identity
+@using Data.Models
 
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavManager
-@inject ITicketsData _db
+@inject ITicketsData _dbTicket
+@inject ISitesData _dbSite
+@inject UserManager<ApplicationUser> UserManager
 
 @*mando Id ticket per il routing*@
 @if (selectedTicket?.Any() == true)
@@ -23,7 +28,7 @@ else
 //su https://blazor.radzen.com/docs/guides/components/datagrid.html
 <RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" 
 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
-AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket>
+AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket EmptyText="Caricamento tabella in corso...">
     <Columns>
         <RadzenDataGridColumn TItem="TicketModel" Property="TicketId" Title="Id" />
         <RadzenDataGridColumn TItem="TicketModel" Property="OpenTime" Title="Data apertura" Reorderable="true">
@@ -42,20 +47,36 @@ AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelect
                 <p style="white-space:normal">@data.Subject</p>
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true"/>
+        <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true" />
         <RadzenDataGridColumn TItem="TicketModel" Property="CloseTime" Title="Data chiusura" Reorderable="true">
             <Template Context="data">
                 @if (data.CloseTime == DateTime.MinValue)
                 {
-                @String.Format("");
+                    @String.Format("");
                 }
                 else
                 {
-                @String.Format("{0:d}", data.CloseTime);
+                    @String.Format("{0:d}", data.CloseTime);
                 }
             </Template>
         </RadzenDataGridColumn>
-</Columns>
+        <RadzenDataGridColumn TItem="TicketModel" Title="Stato Ticket" Reorderable="true">
+            <Template Context="data">
+                @if (data.CloseTime == DateTime.MinValue && data.Contact == null)
+                {
+                <h2><span class="badge badge-danger">Aperto</span></h2>
+                }
+                else if (data.CloseTime == DateTime.MinValue)
+                {
+                <h2><span class="badge badge-warning">In lavorazione</span></h2>
+                }
+                else
+                {
+                <h2><span class="badge badge-success">Chiuso</span></h2>
+                }
+            </Template>
+        </RadzenDataGridColumn>
+    </Columns>
 </RadzenDataGrid>
 <br/>
 }
@@ -67,6 +88,10 @@ AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelect
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await _db.GetTicket();
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userState = authState.User;
+        var user = await UserManager.FindByNameAsync(userState.Identity.Name);
+
+        tickets = await _dbTicket.GetTicketFromBrandId(user.BrandId);
     }
 }

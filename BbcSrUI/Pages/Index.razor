@@ -12,7 +12,7 @@
 @inject IBrandsData _dbBrand
 
 
-@if (tickets == null && sites == null && brands == null)
+@if (tickets is null)
 {
     <p><em>Caricamento...</em></p>
 }
@@ -20,10 +20,7 @@ else
 {
     @foreach (var ticket in tickets)
     {
-        foreach (var site in sites)
-        {
-            if (userBrandId == site.BrandId)
-            {
+ 
                 if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
                 {
                     ticketAperti++;
@@ -36,8 +33,7 @@ else
                 {
                     ticketChiusi++;
                 }
-            }
-        }
+           
     }
     @for (int i = 0; i < 3; i++)
     {
@@ -51,22 +47,20 @@ else
     <div class="col-6 shadow p-3 mb-5 bg-body rounded">
         <h3>Ticket </h3>
         <RadzenChart>
-            <RadzenDonutSeries Data="@situazioneTicket" CategoryProperty="Stato" ValueProperty="TotaleTicket">
-                <TitleTemplate>
+            <RadzenPieSeries  Data="@situazioneTicket" CategoryProperty="Stato" ValueProperty="TotaleTicket">
+                @*<TitleTemplate>
                     <div class="rz-donut-content">
                         <div>Ticket</div>
                         <div>Status</div>
                     </div>
-                </TitleTemplate>
-            </RadzenDonutSeries>
+                </TitleTemplate>*@
+            </RadzenPieSeries>
         </RadzenChart>
     </div>
 }
 
 @code {
     private IEnumerable<TicketModel> tickets;
-    private IEnumerable<SiteModel> sites;
-    private IEnumerable<BrandModel> brands;
 
     private int ticketAperti { get; set; }
     private int ticketInLavorazione { get; set; }
@@ -83,12 +77,12 @@ else
 
     TicketStatus[] situazioneTicket = new TicketStatus[3];
 
+    private List<int> UserSite = new List<int>();
+    private IEnumerable<SiteModel> siteFromeBrand;
+
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await _dbTicket.GetTicket();
-        sites = await _dbSite.GetSite();
-        brands = await _dbBrand.GetBrand();
 
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var userState = authState.User;
@@ -96,5 +90,7 @@ else
         var user = await UserManager.FindByNameAsync(userState.Identity.Name);
         userBrandId = user.BrandId;
         userBrandName = user.UserName;
+
+        tickets = await _dbTicket.GetTicketFromBrandId(userBrandId);
     }
 }

@@ -23,6 +23,21 @@ namespace DataAccessLibrary
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }
 
+        public Task<List<TicketModel>> GetTicketFromSite(IList<int> siteId)
+        {
+            string sql = $"select * from dbo.Tickets where SiteId in ({String.Join(",", siteId)})";
+
+            return _db.LoadData<TicketModel, dynamic>(sql, new { });
+        }
+
+        public Task<List<TicketModel>> GetTicketFromBrandId(int brandId)
+        {
+            string sql = $"select Ticket.* from dbo.Tickets Ticket where Ticket.SiteId in (select Site.SiteId from dbo.Sites Site where Site.BrandId = {brandId})";
+
+            return _db.LoadData<TicketModel, dynamic>(sql, new { });
+        }
+
+
         //public Task InsertTiket(TicketModel ticket)
         //{
         //    string sql = @"insert into dbo.Ticket (CreateTime, Store, Description, Fault, Caller, CloseTime)
