@@ -6,10 +6,15 @@
 @using Microsoft.AspNetCore.Components.Web
 @using Microsoft.AspNetCore.Components.Web.Virtualization
 @using Microsoft.JSInterop
+@using Microsoft.AspNetCore.Identity
 @using BbcSrUI
 @using BbcSrUI.Shared
 @using Radzen
 @using Radzen.Blazor
+
+@using DataAccessLibrary
+@using DataAccessLibrary.Models
+@using Data.Models
 
 @*Imposta tutte le pagine come protette, necesssitano di login*@
 @attribute [Authorize]
