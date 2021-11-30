@@ -2,9 +2,9 @@
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavManager
+@inject UserManager<ApplicationUser> UserManager
 @inject ITicketsData _dbTicket
 @inject ISitesData _dbSite
-@inject UserManager<ApplicationUser> UserManager
 
 @*mando Id ticket per il routing*@
 @if (selectedTicket?.Any() == true)

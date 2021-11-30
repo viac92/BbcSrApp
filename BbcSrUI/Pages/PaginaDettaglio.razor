@@ -1,8 +1,6 @@
 ﻿@page "/Ticket/{Id:int}"
 
-@using DataAccessLibrary
-@using DataAccessLibrary.Models 
-
+@inject NavigationManager navigationManager
 @inject ITicketsData _db
 
 
@@ -74,8 +72,10 @@ else
                      <p>@ticket.CloseTime</p>
                      }
                 </div>
+                <div class="row justify-content-around col-12 mt-5">
+                    <button class="btn btn-primary btn-sm col-2" @onclick="BackToTicket">Torna ai Ticket</button>
+                </div>
             </div>
-      
         }
     }
 }
@@ -96,7 +96,12 @@ else
     var test = Id;
     }
 
- protected override async Task OnInitializedAsync()
+    private void BackToTicket()
+    {
+        navigationManager.NavigateTo("/Ticket");
+    }
+
+    protected override async Task OnInitializedAsync()
     {
         tickets = await _db.GetTicket();
     }
