@@ -1,4 +1,5 @@
 ﻿@page "/"
+@page "/Dashboard"
 
 @using DataAccessLibrary
 @using DataAccessLibrary.Models
@@ -14,60 +15,69 @@
 
 @if (tickets is null)
 {
-    <p><em>Caricamento...</em></p>
+    <MudGrid Justify="Justify.Center">
+        <MudItem Class="mt-5">
+            <MudProgressCircular Class="mx-auto" Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+        </MudItem>
+    </MudGrid>
 }
 else
 {
     @foreach (var ticket in tickets)
-    {
- 
-                if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
-                {
-                    ticketAperti++;
-                }
-                else if (ticket.CloseTime == DateTime.MinValue)
-                {
-                    ticketInLavorazione++;
-                }
-                else
-                {
-                    ticketChiusi++;
-                }
-           
-    }
+     {
+
+            if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+            {
+                //ticket aperti
+                ticketSituazione[0]++;
+            }
+            else if (ticket.CloseTime == DateTime.MinValue)
+            {
+                //ticket in lavorazione
+                ticketSituazione[1]++;
+            }
+            else
+            {
+                //ticket chiusi
+                ticketSituazione[2]++;
+            }
+
+     }
     @for (int i = 0; i < 3; i++)
-    {
+     {
         situazioneTicket[0] = new TicketStatus { Stato = "Aperto", TotaleTicket = ticketAperti };
         situazioneTicket[1] = new TicketStatus { Stato = "In lavorazione", TotaleTicket = ticketInLavorazione };
         situazioneTicket[2] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
-    }
-    <div class="col-12 mb-5">
-        <h1><strong>Home : @userBrandName</strong></h1>
-    </div>
-    <div class="col-6 shadow p-3 mb-5 bg-body rounded">
-        <h3>Ticket </h3>
-        <RadzenChart>
-            <RadzenPieSeries  Data="@situazioneTicket" CategoryProperty="Stato" ValueProperty="TotaleTicket">
-                @*<TitleTemplate>
-                    <div class="rz-donut-content">
-                        <div>Ticket</div>
-                        <div>Status</div>
-                    </div>
-                </TitleTemplate>*@
-            </RadzenPieSeries>
-        </RadzenChart>
-    </div>
+     }
+   
+    <MudGrid  Class="pl-5 pr-5" Justify="Justify.Center">
+        <MudItem xs="12" Class="align-center justify-center mud-width-full py-8">
+            <MudText Align="Align.Center" Typo="Typo.h4">Home - @userBrandName</MudText>
+        </MudItem>
+        <MudItem sm="6" xs="12">
+            <MudPaper Class="pa-5" MinWidth="250px" Elevation="3">
+                <MudChart ChartType="ChartType.Pie" InputData="@ticketSituazione" @bind-SelectedIndex="indexSelezioneGrafico" InputLabels="@tipoTicket" Width="200px" Height="200px" />
+            </MudPaper>
+        </MudItem>
+        <MudItem sm="6" xs="12">
+            <MudPaper Class="pa-5" Elevation="3">Flex Item 1</MudPaper>
+        </MudItem>
+    </MudGrid>
 }
 
 @code {
     private IEnumerable<TicketModel> tickets;
+
+    private double[] ticketSituazione = new double[3];
+    private string[] tipoTicket = { "aperto", "lavorazione", "chiuso" };
+    private int indexSelezioneGrafico = -1;
 
     private int ticketAperti { get; set; }
     private int ticketInLavorazione { get; set; }
     private int ticketChiusi { get; set; }
 
     private int userBrandId { get; set; }
-    private string userBrandName { get; set; }
+    public string userBrandName { get; set; }
 
     class TicketStatus
     {

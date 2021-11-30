@@ -5,7 +5,7 @@
                 <NotAuthorized>
                     <BbcSrUI.Component.RedirectToLogin></BbcSrUI.Component.RedirectToLogin>
                 </NotAuthorized>
-            </AuthorizeRouteView>    
+            </AuthorizeRouteView>
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">
@@ -14,3 +14,6 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+<MudThemeProvider />
+<MudDialogProvider />
+<MudSnackbarProvider />

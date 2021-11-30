@@ -18,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MudBlazor.Services;
 
 namespace BbcSrUI
 {
@@ -47,6 +48,7 @@ namespace BbcSrUI
             services.AddTransient<ITicketsData, TicketsData>();
             services.AddTransient<IBrandsData, BrandsData>();
             services.AddTransient<ISitesData, SitesData>();
+            services.AddMudServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

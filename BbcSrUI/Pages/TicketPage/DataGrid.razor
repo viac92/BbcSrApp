@@ -6,62 +6,73 @@
 @inject ITicketsData _dbTicket
 @inject ISitesData _dbSite
 
+
 @*mando Id ticket per il routing*@
 @if (selectedTicket?.Any() == true)
 {
     NavManager.NavigateTo($"/Ticket/{selectedTicket[0].TicketId}");
 }
 
-<h1 class="mb-5 col-12"><strong>Ticket</strong></h1>
+
 @if (tickets is null)
 {
-    @*<p><em>Caricamento...</em></p>*@
+    <MudGrid Justify="Justify.Center">
+        <MudItem Class="mt-5">
+            <MudProgressCircular Class="mx-auto" Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-//@dev per maggiori informazioni su come modificare la tabella vai
-//su https://blazor.radzen.com/docs/guides/components/datagrid.html
-<RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple" 
-FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel" 
-AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket EmptyText="Caricamento tabella in corso..." AllowVirtualization="true" PageSize="50" Style="height:600px">
-    <Columns>
-        <RadzenDataGridColumn TItem="TicketModel" Property="TicketId" Title="Id" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="OpenTime" Title="Data apertura" Reorderable="true">
-            <Template Context="data">
-                @String.Format("{0:d}", data.OpenTime)
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="SiteId" Title="Store" Reorderable="true">
-            <Template Context="data">
-                <p style="white-space:normal">@data.SiteId</p>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Text" Title="Descrizione" Resizable="true" Reorderable="true" />
-        <RadzenDataGridColumn TItem="TicketModel" Property="Subject" Title="Errore" Reorderable="true">
-            <Template Context="data">
-                <p style="white-space:normal">@data.Subject</p>
-            </Template>
-        </RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true" />
-        <RadzenDataGridColumn TItem="TicketModel" Title="Stato Ticket" Reorderable="true">
-            <Template Context="data">
-                @if (data.CloseTime == DateTime.MinValue && data.Contact == null)
-                {
-                <h2><span class="badge badge-danger">Aperto</span></h2>
-                }
-                else if (data.CloseTime == DateTime.MinValue)
-                {
-                <h2><span class="badge badge-warning">In lavorazione</span></h2>
-                }
-                else
-                {
-                <h2><span class="badge badge-success">Chiuso</span></h2>
-                }
-            </Template>
-        </RadzenDataGridColumn>
-    </Columns>
-</RadzenDataGrid>
-<br/>
+    <MudGrid Justify="Justify.Center">
+        <MudItem xs="12" Class="align-center justify-center mud-width-full py-8">
+            <MudText Align="Align.Center" Typo="Typo.h4">Ticket</MudText>
+        </MudItem>
+    </MudGrid>
+    
+    //@dev per maggiori informazioni su come modificare la tabella vai
+    //su https://blazor.radzen.com/docs/guides/components/datagrid.html
+    <RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple"
+                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel"
+                    AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket EmptyText="" AllowVirtualization="true" PageSize="50" Style="height:600px">
+        <Columns>
+            <RadzenDataGridColumn TItem="TicketModel" Property="TicketId" Title="Id" />
+            <RadzenDataGridColumn TItem="TicketModel" Property="OpenTime" Title="Data apertura" Reorderable="true">
+                <Template Context="data">
+                    @String.Format("{0:d}", data.OpenTime)
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TicketModel" Property="SiteId" Title="Store" Reorderable="true">
+                <Template Context="data">
+                    <p style="white-space:normal">@data.SiteId</p>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TicketModel" Property="Text" Title="Descrizione" Resizable="true" Reorderable="true" />
+            <RadzenDataGridColumn TItem="TicketModel" Property="Subject" Title="Errore" Reorderable="true">
+                <Template Context="data">
+                    <p style="white-space:normal">@data.Subject</p>
+                </Template>
+            </RadzenDataGridColumn>
+            <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true" />
+            <RadzenDataGridColumn TItem="TicketModel" Title="Stato Ticket" Reorderable="true">
+                <Template Context="data">
+                    @if (data.CloseTime == DateTime.MinValue && data.Contact == null)
+                    {
+                        <h2><span class="badge badge-danger">Aperto</span></h2>
+                    }
+                    else if (data.CloseTime == DateTime.MinValue)
+                    {
+                        <h2><span class="badge badge-warning">In lavorazione</span></h2>
+                    }
+                    else
+                    {
+                        <h2><span class="badge badge-success">Chiuso</span></h2>
+                    }
+                </Template>
+            </RadzenDataGridColumn>
+        </Columns>
+    </RadzenDataGrid>
+    <br />
 }
 
 

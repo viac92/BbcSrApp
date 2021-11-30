@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MudBlazor.Services;
 
 namespace BbcSrUI
 {
@@ -18,7 +19,7 @@ namespace BbcSrUI
         {
             var host = CreateHostBuilder(args)
                         .Build();
-
+            
             using (var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
@@ -44,5 +45,7 @@ namespace BbcSrUI
                 {
                     webBuilder.UseStartup<Startup>();
                 });
+
+                    
     }
 }
