@@ -37,6 +37,13 @@ namespace DataAccessLibrary
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }
 
+        public Task<List<TicketModel>> GetTicketFromTicketId(int ticketId)
+        {
+            string sql = $"select * from dbo.Tickets where TicketId = {ticketId}";
+
+            return _db.LoadData<TicketModel, dynamic>(sql, new { });
+        }
+
 
         //public Task InsertTiket(TicketModel ticket)
         //{

@@ -11,5 +11,7 @@ namespace DataAccessLibrary
         Task<List<TicketModel>> GetTicketFromSite(IList<int> siteId);
 
         Task<List<TicketModel>> GetTicketFromBrandId(int brandId);
+
+        Task<List<TicketModel>> GetTicketFromTicketId(int ticketId);
     }
 }

@@ -6,80 +6,77 @@
 
 @if (tickets is null)
 {
-    <p><em>Caricamento...</em></p>
+    <MudGrid Justify="Justify.Center">
+        <MudItem Class="mt-5">
+            <MudProgressCircular Class="mx-auto" Color="Color.Primary" Indeterminate="true" Size="Size.Large" />
+        </MudItem>
+    </MudGrid>
 }
 else
 {
-    @foreach (var ticket in tickets)
-    {
-        @if(ticket.TicketId == Id)
-        {
-            <div class="row shadow p-3 mb-5 bg-body rounded">
-                <div class="col-6 mb-5">
-                    <h3><strong>ID Ticket:</strong></h3>
-                    <h3>@Id</h3>
-                </div>
-                <div class="col-6 mb-5">
-                    <h3><strong>Stato Ticket:</strong></h3>
-                        @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Contact == null)
-                        {
-                            <h2><span class="badge badge-danger">Aperto</span></h2>
-                        }
-                        else if(@ticket.CloseTime == DateTime.MinValue)
-                        {
-                            <h2><span class="badge badge-warning">In lavorazione</span></h2>
-                        }
-                        else 
-                        {
-                            <h2><span class="badge badge-success">Chiuso</span></h2>
-                        }
-                </div>
-                <div class="col-6">
-                    <h4>Data apertura ticket:</h4>
-                    <p>@ticket.OpenTime</p>
-                </div>
-                <div class="col-6">
-                    <h4>Store:</h4>
-                    <p>@ticket.SiteId</p>
-                </div>
-                <div class="col-12">
-                    <h4>Descrizione:</h4>
-                    <p>@ticket.Text</p>
-                </div>
-                <div class="col-6">
-                    <h4>Errore:</h4>
-                    <p>@ticket.Subject</p>
-                </div>
-                <div class="col-6">
-                    <h4>Operatore:</h4>
-                    @if (ticket.Contact == null)
-                    {
-                        <p>Da assegnare</p>
-                    }
-                    else
-                    {
-                        <p>@ticket.Contact</p>
-                    }
-                </div>
-                <div class="col-12">
-                    <h4>Data chiusura ticket:</h4>
-                    @if (ticket.CloseTime == DateTime.MinValue)
-                     {
-                        <p> </p>
-                     }
-                     else
-                     {
-                     <p>@ticket.CloseTime</p>
-                     }
-                </div>
-                <div class="row justify-content-around col-12 mt-5">
-                    <button class="btn btn-primary btn-sm col-2" @onclick="BackToTicket">Torna ai Ticket</button>
-                </div>
-            </div>
-        }
-    }
+    <div class="row shadow p-3 mb-5 bg-body rounded">
+        <div class="col-6 mb-5">
+            <h3><strong>ID Ticket:</strong></h3>
+            <h3>@Id</h3>
+        </div>
+        <div class="col-6 mb-5">
+            <h3><strong>Stato Ticket:</strong></h3>
+                @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Contact == null)
+                {
+                    <h2><span class="badge badge-danger">Aperto</span></h2>
+                }
+                else if(@ticket.CloseTime == DateTime.MinValue)
+                {
+                    <h2><span class="badge badge-warning">In lavorazione</span></h2>
+                }
+                else 
+                {
+                    <h2><span class="badge badge-success">Chiuso</span></h2>
+                }
+        </div>
+        <div class="col-6">
+            <h4>Data apertura ticket:</h4>
+            <p>@ticket.OpenTime</p>
+        </div>
+        <div class="col-6">
+            <h4>Store:</h4>
+            <p>@ticket.SiteId</p>
+        </div>
+        <div class="col-12">
+            <h4>Descrizione:</h4>
+            <p>@ticket.Text</p>
+        </div>
+        <div class="col-6">
+            <h4>Errore:</h4>
+            <p>@ticket.Subject</p>
+        </div>
+        <div class="col-6">
+            <h4>Operatore:</h4>
+            @if (ticket.Contact == null)
+            {
+                <p>Da assegnare</p>
+            }
+            else
+            {
+                <p>@ticket.Contact</p>
+            }
+        </div>
+        <div class="col-12">
+            <h4>Data chiusura ticket:</h4>
+            @if (ticket.CloseTime == DateTime.MinValue)
+                {
+                <p> </p>
+                }
+                else
+                {
+                <p>@ticket.CloseTime</p>
+                }
+        </div>
+        <div class="row justify-content-around col-12 mt-5">
+            <button class="btn btn-primary btn-sm col-2" @onclick="BackToTicket">Torna ai Ticket</button>
+        </div>
+    </div>
 }
-
 
 
 
@@ -87,8 +84,8 @@ else
 	[Parameter]
 	public int Id { get; set; }
 
-    private IEnumerable<TicketModel> tickets;
-
+    private IList<TicketModel> tickets;
+    private TicketModel ticket;
 
 	protected override void OnParametersSet()
     {
@@ -103,6 +100,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await _db.GetTicket();
+        tickets = await _db.GetTicketFromTicketId(Id);
+        ticket = tickets[0];
     }
 }

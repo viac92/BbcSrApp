@@ -8,9 +8,9 @@
 
 
 @*mando Id ticket per il routing*@
-@if (selectedTicket?.Any() == true)
+@if (selectedItem1 is not null)
 {
-    NavManager.NavigateTo($"/Ticket/{selectedTicket[0].TicketId}");
+    NavManager.NavigateTo($"/Ticket/{selectedItem1.TicketId}");
 }
 
 
@@ -24,61 +24,77 @@
 }
 else
 {
-    <MudGrid Justify="Justify.Center">
-        <MudItem xs="12" Class="align-center justify-center mud-width-full py-8">
-            <MudText Align="Align.Center" Typo="Typo.h4">Ticket</MudText>
-        </MudItem>
-    </MudGrid>
-    
-    //@dev per maggiori informazioni su come modificare la tabella vai
-    //su https://blazor.radzen.com/docs/guides/components/datagrid.html
-    <RadzenDataGrid AllowSorting="true" AllowFiltering="true" FilterMode="FilterMode.Simple"
-                    FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" Data="@tickets" TItem="TicketModel"
-                    AllowColumnResize="true" AllowColumnReorder="true" SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedTicket EmptyText="" AllowVirtualization="true" PageSize="50" Style="height:600px">
-        <Columns>
-            <RadzenDataGridColumn TItem="TicketModel" Property="TicketId" Title="Id" />
-            <RadzenDataGridColumn TItem="TicketModel" Property="OpenTime" Title="Data apertura" Reorderable="true">
-                <Template Context="data">
-                    @String.Format("{0:d}", data.OpenTime)
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TicketModel" Property="SiteId" Title="Store" Reorderable="true">
-                <Template Context="data">
-                    <p style="white-space:normal">@data.SiteId</p>
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TicketModel" Property="Text" Title="Descrizione" Resizable="true" Reorderable="true" />
-            <RadzenDataGridColumn TItem="TicketModel" Property="Subject" Title="Errore" Reorderable="true">
-                <Template Context="data">
-                    <p style="white-space:normal">@data.Subject</p>
-                </Template>
-            </RadzenDataGridColumn>
-            <RadzenDataGridColumn TItem="TicketModel" Property="Contact" Title="Operatore" Reorderable="true" />
-            <RadzenDataGridColumn TItem="TicketModel" Title="Stato Ticket" Reorderable="true">
-                <Template Context="data">
-                    @if (data.CloseTime == DateTime.MinValue && data.Contact == null)
-                    {
-                        <h2><span class="badge badge-danger">Aperto</span></h2>
-                    }
-                    else if (data.CloseTime == DateTime.MinValue)
-                    {
-                        <h2><span class="badge badge-warning">In lavorazione</span></h2>
-                    }
-                    else
-                    {
-                        <h2><span class="badge badge-success">Chiuso</span></h2>
-                    }
-                </Template>
-            </RadzenDataGridColumn>
-        </Columns>
-    </RadzenDataGrid>
-    <br />
+    <MudTable Items="@tickets" Class="pa-4" Filter="new Func<TicketModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="true" FixedFooter="true" SortLabel="Sort By">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">Ticket</MudText>
+            <MudSpacer />
+            <MudTextField @bind-Value="searchString1" Placeholder="Cerca" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<TicketModel, object>(x =>x.SiteId)">Id</MudTableSortLabel></MudTh>
+            <MudTh>Data Apertura</MudTh>
+            <MudTh>Store</MudTh>
+            <MudTh>Descrizione</MudTh>
+            <MudTh>Problema</MudTh>
+            <MudTh>Caller</MudTh>
+            <MudTh>Stato</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.TicketId</MudTd>
+            <MudTd DataLabel="Data Apertura">@String.Format("{0:d}", context.OpenTime)</MudTd>
+            <MudTd DataLabel="Store">@context.SiteId</MudTd>
+            <MudTd DataLabel="Descrizione">@GetFirstThirtyChar(context.Text)</MudTd>
+            <MudTd DataLabel="Problema">@context.Subject</MudTd>
+            <MudTd DataLabel="Caller">@context.Contact</MudTd>
+            <MudTd DataLabel="Stato">
+                @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
+                {
+                <MudAlert Severity="Severity.Error">Aperto</MudAlert>
+                }
+                else if (context.CloseTime == DateTime.MinValue)
+                {
+                <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
+                }
+                else
+                {
+                <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
+                }
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>   
 }
 
 
 @code {
     private IEnumerable<TicketModel> tickets;
-    private IList<TicketModel> selectedTicket;
+
+    private string searchString1 = "";
+    private TicketModel selectedItem1 = null;
+
+    private bool FilterFunc1(TicketModel ticket) => FilterFunc(ticket, searchString1);
+
+    private bool FilterFunc(TicketModel ticket, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (ticket.Text.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ticket.Subject.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ticket.Contact is not null && ticket.Contact.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{ticket.TicketId} {ticket.SiteId}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    public string GetFirstThirtyChar(string s)
+    {
+        return (s.Length < 30) ? s+"..." : s.Substring(0, 30)+"...";
+    }
 
     protected override async Task OnInitializedAsync()
     {
