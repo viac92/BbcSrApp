@@ -1,0 +1,21 @@
+﻿@page "/pippo"
+
+<MudCardContent>
+    <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+        <MudTextField T="string" Label="Username" Required="true" RequiredError="Inserisci il nome untente!" />
+        <MudTextField T="string" Label="Password" HelperText="Choose a strong password" @ref="pwField1"
+                      InputType="InputType.Password" Required="true" RequiredError="Inserisci la password!" />
+
+        <MudCheckBox T="bool" Required="true" RequiredError="You must agree" Class="ml-n2"
+                     Label="I agree that MudBlazor is awesome!" />
+    </MudForm>
+</MudCardContent>
+
+
+@code {
+    MudForm form;
+    MudTextField<string> pwField1;
+
+    bool success = false;
+    String[] errors = new string[2];
+}

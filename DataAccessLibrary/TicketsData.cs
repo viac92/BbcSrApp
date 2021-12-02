@@ -32,7 +32,7 @@ namespace DataAccessLibrary
 
         public Task<List<TicketModel>> GetTicketFromBrandId(int brandId)
         {
-            string sql = $"select Ticket.* from dbo.Tickets Ticket where Ticket.SiteId in (select Site.SiteId from dbo.Sites Site where Site.BrandId = {brandId})";
+            string sql = $"select Ticket.* from dbo.Tickets Ticket where Ticket.SiteId in (select Site.SiteId from dbo.Sites Site where Site.BrandId = {brandId}) order by Ticket.OpenTime desc";
 
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }

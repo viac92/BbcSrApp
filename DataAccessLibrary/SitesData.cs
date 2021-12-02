@@ -28,5 +28,12 @@ namespace DataAccessLibrary
 
             return _db.LoadData<SiteModel, dynamic>(sql, new { });
         }
+
+        public Task<List<SiteModel>> GetSiteFormSiteId(int siteId)
+        {
+            string sql = $"select * from dbo.Sites where SiteId = {siteId}";
+            
+            return _db.LoadData<SiteModel, dynamic>(sql, new { }); 
+        }
     }
 }

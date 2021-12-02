@@ -1,10 +1,12 @@
 ﻿@page "/Ticket/{Id:int}"
 
 @inject NavigationManager navigationManager
-@inject ITicketsData _db
+@inject ITicketsData _dbTicket
+@inject IActivitiesData _dbActivitie
+@inject ISitesData _dbSite
 
 
-@if (tickets is null)
+@if (tickets is null || activities is null || storeFromTicket is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -14,83 +16,106 @@
 }
 else
 {
-    <div class="row shadow p-3 mb-5 bg-body rounded">
-        <div class="col-6 mb-5">
-            <h3><strong>ID Ticket:</strong></h3>
-            <h3>@Id</h3>
-        </div>
-        <div class="col-6 mb-5">
-            <h3><strong>Stato Ticket:</strong></h3>
-                @if(@ticket.CloseTime == DateTime.MinValue && @ticket.Contact == null)
-                {
-                    <h2><span class="badge badge-danger">Aperto</span></h2>
-                }
-                else if(@ticket.CloseTime == DateTime.MinValue)
-                {
-                    <h2><span class="badge badge-warning">In lavorazione</span></h2>
-                }
-                else 
-                {
-                    <h2><span class="badge badge-success">Chiuso</span></h2>
-                }
-        </div>
-        <div class="col-6">
-            <h4>Data apertura ticket:</h4>
-            <p>@ticket.OpenTime</p>
-        </div>
-        <div class="col-6">
-            <h4>Store:</h4>
-            <p>@ticket.SiteId</p>
-        </div>
-        <div class="col-12">
-            <h4>Descrizione:</h4>
-            <p>@ticket.Text</p>
-        </div>
-        <div class="col-6">
-            <h4>Errore:</h4>
-            <p>@ticket.Subject</p>
-        </div>
-        <div class="col-6">
-            <h4>Operatore:</h4>
-            @if (ticket.Contact == null)
-            {
-                <p>Da assegnare</p>
-            }
-            else
-            {
-                <p>@ticket.Contact</p>
-            }
-        </div>
-        <div class="col-12">
-            <h4>Data chiusura ticket:</h4>
-            @if (ticket.CloseTime == DateTime.MinValue)
-                {
-                <p> </p>
-                }
-                else
-                {
-                <p>@ticket.CloseTime</p>
-                }
-        </div>
-        <div class="row justify-content-around col-12 mt-5">
-            <button class="btn btn-primary btn-sm col-2" @onclick="BackToTicket">Torna ai Ticket</button>
-        </div>
-    </div>
+<MudGrid Class="pa-5" Justify="Justify.Center">
+    <MudItem xs="12">
+        <MudPaper Class="pa-5" Elevation="3">
+            <MudGrid>
+                <MudItem xs="6">
+                    <MudText Typo="Typo.h6">Ticket n° @ticket.TicketId</MudText>
+                </MudItem>
+                <MudItem xs="6" Class="pl-6">
+                    @if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+                    {
+                        <MudAlert Severity="Severity.Error">Aperto</MudAlert>
+                    }
+                    else if (ticket.CloseTime == DateTime.MinValue)
+                    {
+                        <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
+                    }
+                    else
+                    {
+                        <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
+                    }
+                </MudItem>
+                <MudItem sm="4" xs="12">
+                    <MudText Typo="Typo.h6">Apertura ticket: @String.Format("{0:d}", ticket.OpenTime)</MudText>
+                </MudItem>
+                <MudItem sm="4" xs="6">
+                    <MudText Typo="Typo.h6">Store: @storeFromTicket[0].Name</MudText>
+                </MudItem>
+                <MudItem sm="4" xs="6">
+                    @if (ticket.Contact == null)
+                    {
+                        <MudText Typo="Typo.h6">Operatore: Da assegnare</MudText>
+                    }
+                    else
+                    {
+                        <MudText Typo="Typo.h6">Operatore: @ticket.Contact</MudText>
+                    }
+                </MudItem>
+                <MudItem xs="12" Class="mt-5">
+                    <MudText Typo="Typo.h6">Problema:</MudText>
+                    <MudText Typo="Typo.h6">@ticket.Subject</MudText>
+                </MudItem>
+                <MudItem xs="12" Class="mt-5 mb-5">
+                    <MudText Typo="Typo.h6">Descrizione:</MudText>
+                    <MudText Typo="Typo.body1">@ticket.Text</MudText>
+                </MudItem>
+
+                <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start" Reverse="false">
+                    @foreach (var activitie in activities)
+                    {
+                        @if (activitie.CloseTicket is true)
+                        {
+                            <MudTimelineItem Color="Color.Success" Variant="Variant.Filled">
+                                <ItemContent>
+                                    <MudAlert Severity="Severity.Success">@activitie.Text</MudAlert>
+                                </ItemContent>
+                                <ItemOpposite>
+                                    <MudText Color="Color.Success">13:37</MudText>
+                                </ItemOpposite>
+                            </MudTimelineItem>
+                        }
+                        else
+                        {
+                            <MudTimelineItem Color="Color.Warning" Variant="Variant.Filled">
+                                <ItemContent>
+                                    <MudAlert Severity="Severity.Warning">@activitie.Text</MudAlert>
+                                </ItemContent>
+                                <ItemOpposite>
+                                    <MudText Color="Color.Warning">13:37</MudText>
+                                </ItemOpposite>
+                            </MudTimelineItem>
+                        }
+                     }
+                </MudTimeline>
+                <MudItem xs="12" Class="mt-6">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BackToTicket" StartIcon="@Icons.Filled.KeyboardBackspace">Torna ai ticket</MudButton>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    </MudItem>
+</MudGrid>
 }
 
 
 
+
+
 @code {
-	[Parameter]
-	public int Id { get; set; }
+    [Parameter]
+    public int Id { get; set; }
 
     private IList<TicketModel> tickets;
     private TicketModel ticket;
+    private IList<ActivitieModel> activities;
 
-	protected override void OnParametersSet()
+    private List<SiteModel> storeFromTicket = null;
+
+    protected override void OnParametersSet()
     {
-    //the param will be set now
-    var test = Id;
+        //the param will be set now
+        var test = Id;
     }
 
     private void BackToTicket()
@@ -100,7 +125,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        tickets = await _db.GetTicketFromTicketId(Id);
+        tickets = await _dbTicket.GetTicketFromTicketId(Id);
         ticket = tickets[0];
+
+        activities = await _dbActivitie.GetActiviteFromTicketId(Id);
+        storeFromTicket = await _dbSite.GetSiteFormSiteId(tickets.First().SiteId);
     }
 }

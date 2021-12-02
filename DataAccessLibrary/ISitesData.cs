@@ -8,5 +8,7 @@ namespace DataAccessLibrary
     {
         Task<List<SiteModel>> GetSite();
         Task<List<SiteModel>> GetSiteFromBrand(int brandId);
+
+        Task<List<SiteModel>> GetSiteFormSiteId(int siteId);
     }
 }

@@ -48,6 +48,7 @@ namespace BbcSrUI
             services.AddTransient<ITicketsData, TicketsData>();
             services.AddTransient<IBrandsData, BrandsData>();
             services.AddTransient<ISitesData, SitesData>();
+            services.AddTransient<IActivitiesData, ActivitiesData>();
             services.AddMudServices();
         }
 
