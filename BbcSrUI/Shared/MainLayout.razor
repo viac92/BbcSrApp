@@ -6,7 +6,7 @@
 
 <MudLayout>
     <MudAppBar Elevation="1">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudIconButton Icon="@Icons.Material.Filled.MenuOpen" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
         <AuthorizeView>
             <Authorized>
@@ -15,14 +15,14 @@
                 }
                 <MudAvatar Class="mr-4" Color="Color.Secondary">@UserIniziale</MudAvatar>
                 <form method="post" action="Identity/Account/LogOut">
-                    <MudButton Variant="Variant.Text" Color="Color.Inherit" ButtonType="MudBlazor.ButtonType.Submit" StartIcon="@Icons.Filled.Logout">logout</MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Inherit" ButtonType="MudBlazor.ButtonType.Submit" StartIcon="@Icons.Filled.Logout">esci</MudButton>
                 </form>
             </Authorized>
         </AuthorizeView>
     </MudAppBar>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="2">
         <MudDrawerHeader>
-            <MudText Typo="Typo.h5" Class="mt-1">BBC Technologies</MudText>
+            <img src="/image/logo.gif" style="width: 200px; height:auto;" alt="Logo" />
         </MudDrawerHeader>
         <NavMenu />
     </MudDrawer>
