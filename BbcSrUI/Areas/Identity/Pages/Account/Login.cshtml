@@ -92,6 +92,41 @@
       width: 200px;
       height: auto;
   }
+
+  .text-center {
+      text-align: center;
+  }
+
+  .accedi-bottone {
+        margin-top: 35px;
+  }
+
+
+    .btn-toolset {
+        display: inline-block;
+        text-align: center;
+        white-space: nowrap;
+        color: #FFFFFF;
+        text-decoration: none;
+        line-height: 1.2;
+        font-weight: normal;
+        font-family: sans-serif;
+        font-size: 18px;
+        background-color: #594AE2;
+        border: 1px solid #594AE2;
+        border-radius: 4px;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+
+        .btn-toolset:hover {
+            background-color: #6521CC;
+            border-color: #0056B3;
+        }
+
+        .btn-toolset > strong {
+            font-size: 24px;
+        }
 }
 </style>
 
@@ -101,13 +136,11 @@
     <div class="row justify-content-center">
         <div class="mud-elevation-2 py-8 px-10 rounded white">
             <div class="form">
-                <div class="col-4 text-center">
+                <div class="text-center">
                     <img src="/image/logo.gif" class="immagine" alt="Logo" />
                 </div>
-                <h3>@ViewData["Title"]</h3>
                 <section>
                     <form id="account" method="post">
-                        <h5>Usa il tuo account per accedere al sito.</h5>
                         <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="input-box">
                             <label asp-for="Input.UserName"></label>
@@ -127,8 +160,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="input-box">
-                            <button type="submit" class="btn btn-primary">Accedi</button>
+                        <div class="text-center accedi-bottone">
+                            <button type="submit" class="btn-link btn-toolset">Accedi</button>
                         </div>
                     </form>
                 </section>
