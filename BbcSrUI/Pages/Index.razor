@@ -50,18 +50,15 @@ else
         situazioneTicket[2] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
      }
    
-    <MudGrid  Class="pl-5 pr-5" Justify="Justify.Center">
-        <MudItem xs="12" Class="align-center justify-center mud-width-full py-8">
-            <MudText Align="Align.Center" Typo="Typo.h4">Home - @userBrandName</MudText>
-        </MudItem>
-        <MudItem sm="6" xs="12">
-            <MudPaper Class="pa-5" MinWidth="250px" Elevation="3">
-                <MudChart ChartType="ChartType.Pie" InputData="@ticketSituazione" @bind-SelectedIndex="indexSelezioneGrafico" InputLabels="@tipoTicket" Width="200px" Height="200px" />
-            </MudPaper>
-        </MudItem>
-        <MudItem sm="6" xs="12">
-            <MudPaper Class="pa-5" Elevation="3">Flex Item 1</MudPaper>
-        </MudItem>
+    <MudGrid  Class="pa-5" Justify="Justify.Center">
+            <MudItem sm="6" xs="12">
+                <MudPaper Class="pa-5" MinWidth="250px" Elevation="3">
+                    <MudChart ChartType="ChartType.Pie" InputData="@ticketSituazione" @bind-SelectedIndex="indexSelezioneGrafico" InputLabels="@tipoTicket" Width="200px" Height="200px" />
+                </MudPaper>
+            </MudItem>
+            <MudItem sm="6" xs="12">
+                <MudPaper Class="pa-5" Elevation="3">Flex Item 1</MudPaper>
+            </MudItem>
     </MudGrid>
 }
 
