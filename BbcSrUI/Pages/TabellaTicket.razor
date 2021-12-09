@@ -32,34 +32,32 @@ else
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<TicketModel, object>(x =>x.SiteId)">Id</MudTableSortLabel></MudTh>
+            <MudTh>Stato</MudTh>
             <MudTh>Data Apertura</MudTh>
             <MudTh>Store</MudTh>
-            <MudTh>Descrizione</MudTh>
             <MudTh>Problema</MudTh>
             <MudTh>Operatore</MudTh>
-            <MudTh>Stato</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Id">@context.TicketId</MudTd>
-            <MudTd DataLabel="Data Apertura">@String.Format("{0:d}", context.OpenTime)</MudTd>
-            <MudTd DataLabel="Store">@storeFromTicket[0].Name</MudTd>
-            <MudTd DataLabel="Descrizione">@GetFirstThirtyChar(context.Text)</MudTd>
-            <MudTd DataLabel="Problema">@context.Subject</MudTd>
-            <MudTd DataLabel="Caller">@context.Contact</MudTd>
             <MudTd DataLabel="Stato">
                 @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
-                {
-                <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                }
-                else if (context.CloseTime == DateTime.MinValue)
-                {
-                <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
-                }
-                else
-                {
-                <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
-                }
+                    {
+                    <MudAlert Severity="Severity.Error">Aperto</MudAlert>
+                    }
+                    else if (context.CloseTime == DateTime.MinValue)
+                    {
+                    <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
+                    }
+                    else
+                    {
+                    <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
+                    }
             </MudTd>
+                <MudTd DataLabel="Data Apertura">@String.Format("{0:d}", context.OpenTime)</MudTd>
+                <MudTd DataLabel="Store">@storeFromTicket[0].Name</MudTd>
+                <MudTd DataLabel="Problema">@context.Subject</MudTd>
+                <MudTd DataLabel="Caller">@context.Contact</MudTd>
         </RowTemplate>
         <PagerContent>
             <MudTablePager />
@@ -90,11 +88,6 @@ else
         if ($"{ticket.TicketId} {ticket.SiteId}".Contains(searchString))
             return true;
         return false;
-    }
-
-    public string GetFirstThirtyChar(string s)
-    {
-        return (s.Length < 30) ? s+"..." : s.Substring(0, 30)+"...";
     }
 
     protected override async Task OnInitializedAsync()
