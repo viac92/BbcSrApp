@@ -19,9 +19,8 @@ else
 <MudGrid Class="pa-5" Justify="Justify.Center">
     <MudItem xs="12">
         <MudPaper Class="pa-3 mb-5" Elevation="3">
-            <MudItem xs="12">
-                <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BackToTicket" StartIcon="@Icons.Filled.KeyboardBackspace">Torna ai ticket</MudButton>
-            </MudItem>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BacktoDashboard" StartIcon="@Icons.Filled.Dashboard">Torna alla dashboard</MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BackToTicket" StartIcon="@Icons.Filled.AddTask">Torna ai ticket</MudButton>
         </MudPaper>
         <MudPaper Class="pa-5" Elevation="3">
             <MudGrid>
@@ -61,7 +60,12 @@ else
                 </MudItem>
                 <MudItem xs="12" Class="mt-5 mb-5">
                     <MudText Typo="Typo.h6">Descrizione:</MudText>
-                    <MudText Typo="Typo.body1">@ticket.Text</MudText>
+                    <MudText Typo="Typo.body1">
+                    @{ 
+                        string str = ticket.Text;
+                        str = str.Replace(". ", ".%n");
+                    }
+                    @str</MudText>
                 </MudItem>
 
                 <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start" Reverse="false">
@@ -97,7 +101,7 @@ else
                     }
                 </MudTimeline>
                 <MudItem xs="12" Class="mt-6">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BackToTicket" StartIcon="@Icons.Filled.KeyboardBackspace">Torna ai ticket</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@BackToTicket" StartIcon="@Icons.Filled.AddTask">Torna ai ticket</MudButton>
                 </MudItem>
             </MudGrid>
         </MudPaper>
@@ -129,6 +133,11 @@ else
     private void BackToTicket()
     {
         navigationManager.NavigateTo("/Ticket");
+    }
+    
+    private void BacktoDashboard()
+    {
+        navigationManager.NavigateTo("/");
     }
 
     protected override async Task OnInitializedAsync()

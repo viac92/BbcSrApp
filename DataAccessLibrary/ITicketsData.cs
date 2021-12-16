@@ -13,5 +13,7 @@ namespace DataAccessLibrary
         Task<List<TicketModel>> GetTicketFromBrandId(int brandId);
 
         Task<List<TicketModel>> GetTicketFromTicketId(int ticketId);
+
+        Task<List<TicketModel>> GetTicketLastWeek(int brandId);
     }
 }

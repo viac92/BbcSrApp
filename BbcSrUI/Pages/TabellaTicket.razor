@@ -39,20 +39,20 @@ else
             <MudTh>Operatore</MudTh>
         </HeaderContent>
         <RowTemplate>
-            <MudTd DataLabel="Id">@context.TicketId</MudTd>
+            <MudTd DataLabel="Numero">@context.TicketId</MudTd>
             <MudTd DataLabel="Stato">
                 @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
-                    {
+                {
                     <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                    }
-                    else if (context.CloseTime == DateTime.MinValue)
-                    {
+                }
+                else if (context.CloseTime == DateTime.MinValue)
+                {
                     <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
-                    }
-                    else
-                    {
+                }
+                else
+                {
                     <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
-                    }
+                }
             </MudTd>
                 <MudTd DataLabel="Data Apertura">@String.Format("{0:d}", context.OpenTime)</MudTd>
                 <MudTd DataLabel="Store">@storeFromTicket[0].Name</MudTd>

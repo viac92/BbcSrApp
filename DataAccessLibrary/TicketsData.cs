@@ -44,6 +44,13 @@ namespace DataAccessLibrary
             return _db.LoadData<TicketModel, dynamic>(sql, new { });
         }
 
+        public Task<List<TicketModel>> GetTicketLastWeek(int brandId)
+        {
+            string sql = $"select Ticket.* from dbo.Tickets Ticket where Ticket.OpenTime >= DATEADD(day,-30, GETDATE()) and Ticket.SiteId in (select Site.SiteId from dbo.Sites Site where Site.BrandId = {brandId}) order by Ticket.OpenTime desc";
+
+            return _db.LoadData<TicketModel, dynamic>(sql, new { });
+        }
+
 
         //public Task InsertTiket(TicketModel ticket)
         //{
