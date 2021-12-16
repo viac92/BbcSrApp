@@ -20,7 +20,7 @@
 }
 
 
-@if (tickets is null || ticketsLastWeek is null)
+@if (tickets is null || ticketsLastMonth is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -58,16 +58,16 @@ else
     }
 
 <MudGrid Class="pa-5" Justify="Justify.Center">
-    <MudItem sm="6" xs="12">
-        <MudPaper Class="pa-5" Elevation="3">
+    <MudItem md="6" sm="12">
+        <MudPaper Class="pa-5" Elevation="3" Height="100%">
             <MudText Typo="Typo.h6">Andamento ticket ultimo mese</MudText>
             <MudChart ChartType="ChartType.Line" ChartSeries="@Series" XAxisLabels="@XAxisLabels" Width="100%" Height="350" ChartOptions="options"></MudChart>
         </MudPaper>
     </MudItem>
-    <MudItem sm="6" xs="12">
-            <MudTable Items="@ticketsLastWeek" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
+    <MudItem md="6" sm="12">
+            <MudTable Items="@ticketsLastMonth" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
                 <ToolBarContent>
-                    <MudText Typo="Typo.h6">Ticket utlimo mese</MudText>
+                    <MudText Typo="Typo.h6">Ticket ultimo mese</MudText>
                 </ToolBarContent>
                 <HeaderContent>
                     <MudTh>Numero</MudTh>
@@ -95,33 +95,58 @@ else
                 </PagerContent>
             </MudTable>
     </MudItem>
-    <MudItem sm="6" xs="12">
-        <MudPaper Class="pa-5" MinWidth="250px" Elevation="3">
+    <MudItem md="6" sm="12">
+        <MudPaper Class="pa-5 align-self-start" MinWidth="250px" Elevation="3">
             <MudText Typo="Typo.h6">Resoconto ticket</MudText>
-            <MudChart ChartType="ChartType.Pie" InputData="@ticketSituazione" @bind-SelectedIndex="indexSelezioneGrafico" InputLabels="@tipoTicket" Width="200px" Height="200px" />
+            <MudChart ChartType="ChartType.Pie" InputData="@ticketSituazione" @bind-SelectedIndex="indesmelezioneGrafico" InputLabels="@tipoTicket" Width="200px" Height="200px" />
         </MudPaper>
     </MudItem>
-    <MudItem sm="6" xs="12">
-        <MudPaper Elevation="3"></MudPaper>
+    <MudItem md="6" sm="12">
+        <MudPaper Class="pa-5" Elevation="3" Height="100%">
+            <MudText Typo="Typo.h6">Servizio Help Desk</MudText>
+            <MudText Typo="Typo.body1">
+                Per aprire i ticket potete contattare direttamente i seguenti numeri o mandare un e-mail:
+            </MudText>
+            <MudLink Href="tel:+051270394" Typo="Typo.caption">Tel: 051270394</MudLink>
+            <MudLink Href="tel:+3492356330" Typo="Typo.caption">Cell: 3492356330</MudLink>
+            <MudLink Href="tel:+3492356332" Typo="Typo.caption"> 3492356332</MudLink>
+            <MudLink Href="mailto:helpdesk@bbctech.it" Typo="Typo.caption">E-mail: helpdesk@bbctech.it</MudLink>
+            <MudCarousel Style="height:200px;" ShowArrows="true" ShowDelimiters="false" AutoCycle="true" TData="object">
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                    </div>
+                </MudCarouselItem>
+                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                    </div>
+                </MudCarouselItem>
+                <MudCarouselItem Transition="Transition.Slide">
+                    <div class="d-flex" style="height:100%">
+                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+                    </div>
+                </MudCarouselItem>
+            </MudCarousel>
+        </MudPaper>
     </MudItem>
 </MudGrid>
 }
 
 @code {
     private IEnumerable<TicketModel> tickets;
-    private IEnumerable<TicketModel> ticketsLastWeek;
+    private IEnumerable<TicketModel> ticketsLastMonth;
 
     public List<ChartSeries> Series = new List<ChartSeries>()
     {
         new ChartSeries() { Name = "Series 1", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
-        new ChartSeries() { Name = "Series 2", Data = new double[] { 35, 41, 35, 51, 49, 62, 69, 91, 148 } },
     };
     public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
     private ChartOptions options = new ChartOptions();
 
     private double[] ticketSituazione = new double[3];
     private string[] tipoTicket = { "aperto", "lavorazione", "chiuso" };
-    private int indexSelezioneGrafico = -1;
+    private int indesmelezioneGrafico = -1;
 
     private int ticketAperti { get; set; }
     private int ticketInLavorazione { get; set; }
@@ -155,6 +180,6 @@ else
         userBrandName = user.UserName;
 
         tickets = await _dbTicket.GetTicketFromBrandId(userBrandId);
-        ticketsLastWeek = await _dbTicket.GetTicketLastWeek(userBrandId);
+        ticketsLastMonth = await _dbTicket.GetTicketLastMonth(userBrandId);
     }
 }
