@@ -3,8 +3,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavManager
 @inject UserManager<ApplicationUser> UserManager
-@inject ITicketsData _dbTicket
-@inject ISitesData _dbSite
+@inject ITicketNewData _dbTicketNewData
 
 
 @*mando Id ticket per il routing*@
@@ -14,7 +13,7 @@
 }
 
 
-@if (tickets is null || storeFromTicket is null)
+@if (ticketNew is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -24,11 +23,11 @@
 }
 else
 {
-    <MudTable Items="@tickets" Class="pa-4" Filter="new Func<TicketModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="true" FixedFooter="true" SortLabel="Sort By">
+    <MudTable Items="@ticketNew" Class="pa-4" Filter="new Func<TicketNewModel,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1" Hover="true" FixedHeader="true" FixedFooter="true" RowsPerPage="10" SortLabel="Sort By">
         <ToolBarContent>
             <MudText Typo="Typo.h6">Ticket</MudText>
             <MudSpacer />
-            <MudTextField @bind-Value="searchString1" Placeholder="Cerca" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="searchString1" Placeholder="Inserire la parola chiave" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<TicketModel, object>(x =>x.SiteId)">Id</MudTableSortLabel></MudTh>
@@ -41,13 +40,9 @@ else
         <RowTemplate>
             <MudTd DataLabel="Numero">@context.TicketId</MudTd>
             <MudTd DataLabel="Stato">
-                @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
+                @if (context.StatoTicket == "Aperto")
                 {
                     <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                }
-                else if (context.CloseTime == DateTime.MinValue)
-                {
-                    <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
                 }
                 else
                 {
@@ -55,7 +50,7 @@ else
                 }
             </MudTd>
                 <MudTd DataLabel="Data Apertura">@String.Format("{0:d}", context.OpenTime)</MudTd>
-                <MudTd DataLabel="Store">@storeFromTicket[0].Name</MudTd>
+                <MudTd DataLabel="Store">@context.StoreName</MudTd>
                 <MudTd DataLabel="Problema">@context.Subject</MudTd>
                 <MudTd DataLabel="Caller">@context.Contact</MudTd>
         </RowTemplate>
@@ -67,15 +62,15 @@ else
 
 
 @code {
-    private IEnumerable<TicketModel> tickets;
+    private IEnumerable<TicketNewModel> ticketNew;
+
 
     private string searchString1 = "";
-    private TicketModel selectedItem1 = null;
-    private List<SiteModel> storeFromTicket = null;
+    private TicketNewModel selectedItem1 = null;
 
-    private bool FilterFunc1(TicketModel ticket) => FilterFunc(ticket, searchString1);
+    private bool FilterFunc1(TicketNewModel ticket) => FilterFunc(ticket, searchString1);
 
-    private bool FilterFunc(TicketModel ticket, string searchString)
+    private bool FilterFunc(TicketNewModel ticket, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -85,7 +80,9 @@ else
             return true;
         if (ticket.Contact is not null && ticket.Contact.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
-        if ($"{ticket.TicketId} {ticket.SiteId}".Contains(searchString))
+        if (ticket.StoreName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ticket.StatoTicket.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
@@ -96,7 +93,6 @@ else
         var userState = authState.User;
         var user = await UserManager.FindByNameAsync(userState.Identity.Name);
 
-        tickets = await _dbTicket.GetTicketFromBrandId(user.BrandId);
-        storeFromTicket = await _dbSite.GetSiteFormSiteId(tickets.First().SiteId);
+        ticketNew = await _dbTicketNewData.GetNewTicket(user.BrandId);
     }
 }

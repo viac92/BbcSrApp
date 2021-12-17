@@ -27,4 +27,10 @@
     <Folder Include="wwwroot\css\bootstrap\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="DataAccessLibrary">
+      <HintPath>..\DataAccessLibrary\bin\Debug\net5.0\DataAccessLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
