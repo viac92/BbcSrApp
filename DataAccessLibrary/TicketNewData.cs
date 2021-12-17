@@ -26,7 +26,23 @@ namespace DataAccessLibrary
                             from Tickets T
                             join Sites S on T.SiteId = S.SiteId
                             join Brands B on S.BrandId = B.BrandId
-                            where B.BrandId = 706
+                            where B.BrandId = {brandId}
+                            order by StatoTicket, OpenTime desc;";
+
+            return _db.LoadData<TicketNewModel, dynamic>(sql, new { });
+        }
+
+        public Task<List<TicketNewModel>> GetNewTicketFromTicketId(int ticketId)
+        {
+            string sql = $@"select T.TicketId, S.Name as StoreName, T.Subject, T.Text, T.Contact, T.OpenTime, B.BrandId,
+                            case
+	                            when T.CloseTime is null then 'Aperto'
+	                            when T.CloseTime is not null then 'Chiuso'
+                            end as StatoTicket
+                            from Tickets T
+                            join Sites S on T.SiteId = S.SiteId
+                            join Brands B on S.BrandId = B.BrandId
+                            where T.TicketId = {ticketId}
                             order by StatoTicket, OpenTime desc;";
 
             return _db.LoadData<TicketNewModel, dynamic>(sql, new { });

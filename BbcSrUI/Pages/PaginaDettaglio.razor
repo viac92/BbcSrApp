@@ -4,9 +4,10 @@
 @inject ITicketsData _dbTicket
 @inject IActivitiesData _dbActivitie
 @inject ISitesData _dbSite
+@inject ITicketNewData _dbTicketNew
 
 
-@if (tickets is null || activities is null || storeFromTicket is null)
+@if (tickets is null || activities is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -25,13 +26,9 @@ else
         <MudPaper Class="pa-5" Elevation="3">
             <MudGrid>
                 <MudItem xs="12">
-                    @if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+                    @if (ticket.StatoTicket == "Aperto")
                     {
                     <MudAlert Severity="Severity.Error">Ticket n° @ticket.TicketId - Aperto</MudAlert>
-                    }
-                    else if (ticket.CloseTime == DateTime.MinValue)
-                    {
-                <MudAlert Severity="Severity.Warning">Ticket n° @ticket.TicketId - In Lavorazione</MudAlert>
                     }
                     else
                     {
@@ -52,7 +49,7 @@ else
                     }
                 </MudItem>
                 <MudItem sm="12" xs="12">
-                    <MudText Typo="Typo.h6">Store: @storeFromTicket[0].Name</MudText>
+                    <MudText Typo="Typo.h6">Store: @ticket.StoreName</MudText>
                 </MudItem>
                 <MudItem xs="12" Class="mt-5">
                     <MudText Typo="Typo.h6">Problema:</MudText>
@@ -61,11 +58,8 @@ else
                 <MudItem xs="12" Class="mt-5 mb-5">
                     <MudText Typo="Typo.h6">Descrizione:</MudText>
                     <MudText Typo="Typo.body1">
-                    @{ 
-                        string str = ticket.Text;
-                        str = str.Replace(". ", ".%n");
-                    }
-                    @str</MudText>
+                    @ticket.Text
+                    </MudText>
                 </MudItem>
 
                 <MudTimeline TimelineOrientation="TimelineOrientation.Vertical" TimelinePosition="TimelinePosition.Start" Reverse="false">
@@ -116,13 +110,11 @@ else
 @code {
     [Parameter]
     public int Id { get; set; }
-    private string descrizione { get; set; }
 
-    private IList<TicketModel> tickets;
-    private TicketModel ticket;
+    private IList<TicketNewModel> tickets;
+    private TicketNewModel ticket;
+
     private IList<ActivitieModel> activities;
-
-    private List<SiteModel> storeFromTicket = null;
 
     protected override void OnParametersSet()
     {
@@ -134,7 +126,7 @@ else
     {
         navigationManager.NavigateTo("/Ticket");
     }
-    
+
     private void BacktoDashboard()
     {
         navigationManager.NavigateTo("/");
@@ -143,10 +135,9 @@ else
     protected override async Task OnInitializedAsync()
     {
 
-        tickets = await _dbTicket.GetTicketFromTicketId(Id);
+        tickets = await _dbTicketNew.GetNewTicketFromTicketId(Id);
         ticket = tickets[0];
 
         activities = await _dbActivitie.GetActiviteFromTicketId(Id);
-        storeFromTicket = await _dbSite.GetSiteFormSiteId(tickets.First().SiteId);
     }
 }
