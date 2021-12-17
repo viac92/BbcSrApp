@@ -12,6 +12,7 @@
 @inject ITicketsData _dbTicket
 @inject ISitesData _dbSite
 @inject IBrandsData _dbBrand
+@inject ITicketNewData _dbTicketNew
 
 @*mando Id ticket per il routing*@
 @if (selectedItem1 is not null)
@@ -33,28 +34,22 @@ else
     @foreach (var ticket in tickets)
     {
 
-        if (ticket.CloseTime == DateTime.MinValue && ticket.Contact == null)
+        if (ticket.StatoTicket == "Aperto")
         {
             //ticket aperti
             ticketSituazione[0]++;
         }
-        else if (ticket.CloseTime == DateTime.MinValue)
-        {
-            //ticket in lavorazione
-            ticketSituazione[1]++;
-        }
         else
         {
             //ticket chiusi
-            ticketSituazione[2]++;
+            ticketSituazione[1]++;
         }
 
     }
-    @for (int i = 0; i < 3; i++)
+    @for (int i = 0; i < 2; i++)
     {
         situazioneTicket[0] = new TicketStatus { Stato = "Aperto", TotaleTicket = ticketAperti };
-        situazioneTicket[1] = new TicketStatus { Stato = "In lavorazione", TotaleTicket = ticketInLavorazione };
-        situazioneTicket[2] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
+        situazioneTicket[1] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
     }
 
 <MudGrid Class="pa-5" Justify="Justify.Center">
@@ -81,10 +76,6 @@ else
                     @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
                         {
                         <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                        }
-                        else if (context.CloseTime == DateTime.MinValue)
-                        {
-                        <MudAlert Severity="Severity.Warning">In Lavorazione</MudAlert>
                         }
                         else
                         {
@@ -115,7 +106,7 @@ else
             <MudLink Href="tel:+3492356330" Typo="Typo.caption">Cell: 3492356330</MudLink>
             <MudLink Href="tel:+3492356332" Typo="Typo.caption"> 3492356332</MudLink>
             <MudLink Href="mailto:helpdesk@bbctech.it" Typo="Typo.caption">E-mail: helpdesk@bbctech.it</MudLink>
-            <MudCarousel Style="height:200px;" ShowArrows="true" ShowDelimiters="false" AutoCycle="true" TData="object">
+            <MudCarousel Class="mt-5" Style="height:200px;" ShowArrows="true" ShowDelimiters="false" AutoCycle="true" TData="object">
                 <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
                     <div class="d-flex" style="height:100%">
                         <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
@@ -138,7 +129,7 @@ else
 }
 
 @code {
-    private IEnumerable<TicketModel> tickets;
+    private IEnumerable<TicketNewModel> tickets;
     private IEnumerable<TicketModel> ticketsLastMonth;
 
     public List<ChartSeries> Series = new List<ChartSeries>()
@@ -148,8 +139,8 @@ else
     public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
     private ChartOptions options = new ChartOptions();
 
-    private double[] ticketSituazione = new double[3];
-    private string[] tipoTicket = { "aperto", "lavorazione", "chiuso" };
+    private double[] ticketSituazione = new double[2];
+    private string[] tipoTicket = { "aperto", "chiuso" };
     private int indesmelezioneGrafico = -1;
 
     private int ticketAperti { get; set; }
@@ -167,7 +158,7 @@ else
         public int TotaleTicket { get; set; }
     }
 
-    TicketStatus[] situazioneTicket = new TicketStatus[3];
+    TicketStatus[] situazioneTicket = new TicketStatus[2];
 
     private List<int> UserSite = new List<int>();
     private IEnumerable<SiteModel> siteFromeBrand;
@@ -183,7 +174,7 @@ else
         userBrandId = user.BrandId;
         userBrandName = user.UserName;
 
-        tickets = await _dbTicket.GetTicketFromBrandId(userBrandId);
+        tickets = await _dbTicketNew.GetNewTicket(userBrandId);
         ticketsLastMonth = await _dbTicket.GetTicketLastMonth(userBrandId);
     }
 }
