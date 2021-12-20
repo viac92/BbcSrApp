@@ -30,7 +30,7 @@ else
             <MudTextField @bind-Value="searchString1" Placeholder="Inserire la parola chiave" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<TicketModel, object>(x =>x.SiteId)">Id</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<TicketNewModel, object>(x =>x.TicketId)">Id</MudTableSortLabel></MudTh>
             <MudTh>Stato</MudTh>
             <MudTh>Data Apertura</MudTh>
             <MudTh>Store</MudTh>

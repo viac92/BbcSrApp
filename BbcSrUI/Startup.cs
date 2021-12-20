@@ -45,11 +45,9 @@ namespace BbcSrUI
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddTransient<ISqlDataAccess, SqlDataAccess>();
-            services.AddTransient<ITicketsData, TicketsData>();
-            services.AddTransient<IBrandsData, BrandsData>();
-            services.AddTransient<ISitesData, SitesData>();
             services.AddTransient<IActivitiesData, ActivitiesData>();
             services.AddTransient<ITicketNewData, TicketNewData>();
+            services.AddTransient<ITicketApertiDateData, TicketApertiDateData>();
             services.AddMudServices();
         }
 

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 
 namespace DataAccessLibrary
 {
-    public interface IBrandsData
+    public interface ITicketApertiDateData
     {
-        Task<List<BrandModel>> GetBrand();
+        Task<List<TicketApertiDateModel>> GetTicketApertiLastMonth(int brandId);
     }
 }

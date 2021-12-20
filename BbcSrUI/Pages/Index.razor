@@ -10,6 +10,7 @@
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavManager
 @inject ITicketNewData _dbTicketNew
+@inject ITicketApertiDateData _dbTicketAperti
 
 @*mando Id ticket per il routing*@
 @if (selectedItem1 is not null)
@@ -18,7 +19,7 @@
 }
 
 
-@if (tickets is null || ticketsLastMonth is null)
+@if (tickets is null || lastTenTickets is null || ticketAperti is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -41,8 +42,16 @@ else
             //ticket chiusi
             ticketSituazione[1]++;
         }
-
     }
+
+    
+    Series[0].Data[0] = Convert.ToDouble(ticketAperti[0].TrentaGiorni);
+    Series[0].Data[1] = Convert.ToDouble(ticketAperti[0].VentiCinqueGiorni);
+    Series[0].Data[2] = Convert.ToDouble(ticketAperti[0].VentiGiorni);
+    Series[0].Data[3] = Convert.ToDouble(ticketAperti[0].QuindiciGiorni);
+    Series[0].Data[4] = Convert.ToDouble(ticketAperti[0].DieciGiorni);
+    Series[0].Data[5] = Convert.ToDouble(ticketAperti[0].CinqueGiorni);
+    Series[0].Data[6] = Convert.ToDouble(ticketAperti[0].Oggi);
 
 <MudGrid Class="pa-5" Justify="Justify.Center">
     <MudItem md="6" sm="12">
@@ -52,7 +61,7 @@ else
         </MudPaper>
     </MudItem>
     <MudItem md="6" sm="12">
-        <MudTable Items="@ticketsLastMonth" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
+        <MudTable Items="@lastTenTickets" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">Ultimi ticket</MudText>
             </ToolBarContent>
@@ -66,13 +75,13 @@ else
                 <MudTd DataLabel="Problema">@context.Subject</MudTd>
                 <MudTd DataLabel="Stato">
                     @if (context.StatoTicket == "Aperto")
-                        {
+                    {
                         <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
-                        }
+                    }
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -126,15 +135,17 @@ else
 
     //Enum con dati ticket da server
     private IEnumerable<TicketNewModel> tickets;
-    private IEnumerable<TicketNewModel> ticketsLastMonth;
+    private IEnumerable<TicketNewModel> lastTenTickets;
 
     //scheda LineChart
     public List<ChartSeries> Series = new List<ChartSeries>()
     {
-        new ChartSeries() { Name = "Ticket Aperti", Data = new double[] { 0, 1, 10, 5, 2, 4, 25 } },
+        new ChartSeries() { Name = "Ticket Aperti", Data = new double[7]},
     };
-    public string[] XAxisLabels = { "1", "5", "10", "15", "20", "25", "30"};
-    private ChartOptions options = new ChartOptions() { YAxisTicks = 1};
+    public string[] XAxisLabels = { "1", "5", "10", "15", "20", "25", "30" };
+    private ChartOptions options = new ChartOptions() { YAxisTicks = 1 };
+
+    private IList<TicketApertiDateModel> ticketAperti;
 
     //scheda DonoutChart
     class TicketStatus
@@ -162,6 +173,8 @@ else
         userBrandName = user.UserName;
 
         tickets = await _dbTicketNew.GetNewTicket(userBrandId);
-        ticketsLastMonth = await _dbTicketNew.GetNewTicketFromTicketIdLastTen(userBrandId);
+        lastTenTickets = await _dbTicketNew.GetNewTicketFromTicketIdLastTen(userBrandId);
+
+        ticketAperti = await _dbTicketAperti.GetTicketApertiLastMonth(userBrandId);
     }
 }
