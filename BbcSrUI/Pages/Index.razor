@@ -43,11 +43,6 @@ else
         }
 
     }
-    @for (int i = 0; i < 2; i++)
-    {
-        situazioneTicket[0] = new TicketStatus { Stato = "Aperto", TotaleTicket = ticketAperti };
-        situazioneTicket[1] = new TicketStatus { Stato = "Chiuso", TotaleTicket = ticketChiusi };
-    }
 
 <MudGrid Class="pa-5" Justify="Justify.Center">
     <MudItem md="6" sm="12">
@@ -125,6 +120,10 @@ else
 }
 
 @code {
+    //generali
+    private int userBrandId { get; set; }
+    public string userBrandName { get; set; }
+
     //Enum con dati ticket da server
     private IEnumerable<TicketNewModel> tickets;
     private IEnumerable<TicketNewModel> ticketsLastMonth;
@@ -138,19 +137,6 @@ else
     private ChartOptions options = new ChartOptions() { YAxisTicks = 1};
 
     //scheda DonoutChart
-    private double[] ticketSituazione = new double[2];
-    private string[] tipoTicket = { "aperto", "chiuso" };
-
-    private int ticketAperti { get; set; }
-    private int ticketInLavorazione { get; set; }
-    private int ticketChiusi { get; set; }
-
-    //scheda Tables
-    private TicketNewModel selectedItem1;
-
-    private int userBrandId { get; set; }
-    public string userBrandName { get; set; }
-
     class TicketStatus
     {
         public string Stato { get; set; }
@@ -158,6 +144,11 @@ else
     }
 
     TicketStatus[] situazioneTicket = new TicketStatus[2];
+    private double[] ticketSituazione = new double[2];
+    private string[] tipoTicket = { "aperto", "chiuso" };
+
+    //scheda Tables
+    private TicketNewModel selectedItem1;
 
 
     protected override async Task OnInitializedAsync()
