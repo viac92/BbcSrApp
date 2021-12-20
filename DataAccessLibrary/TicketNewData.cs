@@ -47,5 +47,33 @@ namespace DataAccessLibrary
 
             return _db.LoadData<TicketNewModel, dynamic>(sql, new { });
         }
+
+        public Task<List<TicketNewModel>> GetNewTicketFromTicketIdLastTen(int brandId2)
+        {
+            string sql = $@"select top 10 T.TicketId, S.Name as StoreName, T.Subject, T.Text, T.Contact, T.OpenTime, B.BrandId,
+                            case
+	                            when T.CloseTime is null then 'Aperto'
+	                            when T.CloseTime is not null then 'Chiuso'
+                            end as StatoTicket
+                            from Tickets T
+                            join Sites S on T.SiteId = S.SiteId
+                            join Brands B on S.BrandId = B.BrandId
+                            where B.BrandId = {brandId2}
+                            order by StatoTicket, OpenTime desc;";
+
+            return _db.LoadData<TicketNewModel, dynamic>(sql, new { });
+        }
+
+        public Task<List<TicketNewModel>> GetTicketOpen(int brandId, int daysAgo)
+        {
+            string sql = $@"select T.TicketId
+                            from Tickets T
+                            join Sites S on T.SiteId = S.SiteId
+                            join Brands B on S.BrandId = B.BrandId
+                            where B.BrandId = {brandId}
+							and T.OpenTime <= dateadd(day, -{daysAgo}, getdate())
+							and T.CloseTime is null;";
+            return _db.LoadData<TicketNewModel, dynamic>(sql, new { });
+        }
     }
 }

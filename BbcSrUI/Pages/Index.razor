@@ -9,9 +9,6 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject UserManager<ApplicationUser> UserManager
 @inject NavigationManager NavManager
-@inject ITicketsData _dbTicket
-@inject ISitesData _dbSite
-@inject IBrandsData _dbBrand
 @inject ITicketNewData _dbTicketNew
 
 @*mando Id ticket per il routing*@
@@ -62,7 +59,7 @@ else
     <MudItem md="6" sm="12">
         <MudTable Items="@ticketsLastMonth" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
             <ToolBarContent>
-                <MudText Typo="Typo.h6">Ticket ultimo mese</MudText>
+                <MudText Typo="Typo.h6">Ultimi ticket</MudText>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>Numero</MudTh>
@@ -73,7 +70,7 @@ else
                 <MudTd DataLabel="Numero Ticket">@context.TicketId</MudTd>
                 <MudTd DataLabel="Problema">@context.Subject</MudTd>
                 <MudTd DataLabel="Stato">
-                    @if (context.CloseTime == DateTime.MinValue && context.Contact == null)
+                    @if (context.StatoTicket == "Aperto")
                         {
                         <MudAlert Severity="Severity.Error">Aperto</MudAlert>
                         }
@@ -107,19 +104,18 @@ else
             <MudLink Href="tel:+3492356332" Typo="Typo.caption"> 3492356332</MudLink>
             <MudLink Href="mailto:helpdesk@bbctech.it" Typo="Typo.caption">E-mail: helpdesk@bbctech.it</MudLink>
             <MudCarousel Class="mt-5" Style="height:200px;" ShowArrows="true" ShowDelimiters="false" AutoCycle="true" TData="object">
-                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Primary">
+                <MudCarouselItem Transition="Transition.Slide">
                     <div class="d-flex" style="height:100%">
-                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
-                    </div>
-                </MudCarouselItem>
-                <MudCarouselItem Transition="Transition.Slide" Color="@Color.Secondary">
-                    <div class="d-flex" style="height:100%">
-                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                        <MudItem Class="my-auto mx-auto">
+                            <img src="/image/IposLogo.gif" alt="logo ipos" style="height:auto; width:200px" />
+                        </MudItem>
                     </div>
                 </MudCarouselItem>
                 <MudCarouselItem Transition="Transition.Slide">
                     <div class="d-flex" style="height:100%">
-                        <MudIcon Class="mx-auto my-auto" Icon="@Icons.Custom.Brands.MudBlazor" Color="@Color.Primary" Size="@Size.Large" />
+                        <MudItem Class="my-auto mx-auto">
+                            <img src="/image/SmartLogo.gif" alt="logo smart" style="height:auto; width:300px" />
+                        </MudItem>
                     </div>
                 </MudCarouselItem>
             </MudCarousel>
@@ -129,25 +125,28 @@ else
 }
 
 @code {
+    //Enum con dati ticket da server
     private IEnumerable<TicketNewModel> tickets;
-    private IEnumerable<TicketModel> ticketsLastMonth;
+    private IEnumerable<TicketNewModel> ticketsLastMonth;
 
+    //scheda LineChart
     public List<ChartSeries> Series = new List<ChartSeries>()
     {
-        new ChartSeries() { Name = "Series 1", Data = new double[] { 90, 79, 72, 69, 62, 62, 55, 65, 70 } },
+        new ChartSeries() { Name = "Ticket Aperti", Data = new double[] { 0, 1, 10, 5, 2, 4, 25 } },
     };
-    public string[] XAxisLabels = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep" };
-    private ChartOptions options = new ChartOptions();
+    public string[] XAxisLabels = { "1", "5", "10", "15", "20", "25", "30"};
+    private ChartOptions options = new ChartOptions() { YAxisTicks = 1};
 
+    //scheda DonoutChart
     private double[] ticketSituazione = new double[2];
     private string[] tipoTicket = { "aperto", "chiuso" };
-    private int indesmelezioneGrafico = -1;
 
     private int ticketAperti { get; set; }
     private int ticketInLavorazione { get; set; }
     private int ticketChiusi { get; set; }
 
-    private TicketModel selectedItem1;
+    //scheda Tables
+    private TicketNewModel selectedItem1;
 
     private int userBrandId { get; set; }
     public string userBrandName { get; set; }
@@ -159,9 +158,6 @@ else
     }
 
     TicketStatus[] situazioneTicket = new TicketStatus[2];
-
-    private List<int> UserSite = new List<int>();
-    private IEnumerable<SiteModel> siteFromeBrand;
 
 
     protected override async Task OnInitializedAsync()
@@ -175,6 +171,6 @@ else
         userBrandName = user.UserName;
 
         tickets = await _dbTicketNew.GetNewTicket(userBrandId);
-        ticketsLastMonth = await _dbTicket.GetTicketLastMonth(userBrandId);
+        ticketsLastMonth = await _dbTicketNew.GetNewTicketFromTicketIdLastTen(userBrandId);
     }
 }

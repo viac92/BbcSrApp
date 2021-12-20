@@ -8,5 +8,6 @@ namespace DataAccessLibrary
     {
         Task<List<TicketNewModel>> GetNewTicket(int brandId);
         Task<List<TicketNewModel>> GetNewTicketFromTicketId(int ticketId);
+        Task<List<TicketNewModel>> GetNewTicketFromTicketIdLastTen(int brandId2);
     }
 }
