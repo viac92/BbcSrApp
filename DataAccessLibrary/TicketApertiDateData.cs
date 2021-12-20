@@ -31,5 +31,21 @@ namespace DataAccessLibrary
                                     where B.BrandId = {brandId};";
             return _db.LoadData<TicketApertiDateModel, dynamic>(sql, new { });
         }
+
+        public Task<List<TicketApertiDateModel>> GetTicketApertiTwoMonth(int brandId)
+        {
+            string sql = $@"select count(case when T.OpenTime <= dateadd(day, -60, getdate()) and CloseTime is null then 1 else null end) as TrentaGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -55, getdate()) and CloseTime is null then 1 else null end) as VentiCinqueGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -50, getdate()) and CloseTime is null then 1 else null end) as VentiGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -45, getdate()) and CloseTime is null then 1 else null end) as QuindiciGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -40, getdate()) and CloseTime is null then 1 else null end) as DieciGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -35, getdate()) and CloseTime is null then 1 else null end) as CinqueGiorni,
+	                               count(case when T.OpenTime <= dateadd(day, -30, getdate()) and CloseTime is null then 1 else null end) as Oggi
+                                    from Tickets T
+                                    join Sites S on T.SiteId = S.SiteId
+                                    join Brands B on S.BrandId = B.BrandId
+                                    where B.BrandId = {brandId};";
+            return _db.LoadData<TicketApertiDateModel, dynamic>(sql, new { });
+        }
     }
 }

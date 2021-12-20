@@ -19,7 +19,7 @@
 }
 
 
-@if (tickets is null || lastTenTickets is null || ticketAperti is null)
+@if (tickets is null || lastTenTickets is null || ticketAperti is null || ticketApertiMeseScorso is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -52,6 +52,15 @@ else
     Series[0].Data[4] = Convert.ToDouble(ticketAperti[0].DieciGiorni);
     Series[0].Data[5] = Convert.ToDouble(ticketAperti[0].CinqueGiorni);
     Series[0].Data[6] = Convert.ToDouble(ticketAperti[0].Oggi);
+
+    //Inserisco dati
+    Series[1].Data[0] = Convert.ToDouble(ticketApertiMeseScorso[0].TrentaGiorni);
+    Series[1].Data[1] = Convert.ToDouble(ticketApertiMeseScorso[0].VentiCinqueGiorni);
+    Series[1].Data[2] = Convert.ToDouble(ticketApertiMeseScorso[0].VentiGiorni);
+    Series[1].Data[3] = Convert.ToDouble(ticketApertiMeseScorso[0].QuindiciGiorni);
+    Series[1].Data[4] = Convert.ToDouble(ticketApertiMeseScorso[0].DieciGiorni);
+    Series[1].Data[5] = Convert.ToDouble(ticketApertiMeseScorso[0].CinqueGiorni);
+    Series[1].Data[6] = Convert.ToDouble(ticketApertiMeseScorso[0].Oggi);
 
 <MudGrid Class="pa-5" Justify="Justify.Center">
     <MudItem md="6" sm="12">
@@ -140,12 +149,14 @@ else
     //scheda LineChart
     public List<ChartSeries> Series = new List<ChartSeries>()
     {
-        new ChartSeries() { Name = "Ticket Aperti", Data = new double[7]},
+        new ChartSeries() { Name = "Ticket aperti", Data = new double[7]},
+        new ChartSeries() { Name = "Ticket aperti mese scorso", Data = new double[7]}
     };
     public string[] XAxisLabels = { "1", "5", "10", "15", "20", "25", "30" };
     private ChartOptions options = new ChartOptions() { YAxisTicks = 1 };
 
     private IList<TicketApertiDateModel> ticketAperti;
+    private IList<TicketApertiDateModel> ticketApertiMeseScorso;
 
     //scheda DonoutChart
     class TicketStatus
@@ -176,5 +187,6 @@ else
         lastTenTickets = await _dbTicketNew.GetNewTicketFromTicketIdLastTen(userBrandId);
 
         ticketAperti = await _dbTicketAperti.GetTicketApertiLastMonth(userBrandId);
+        ticketApertiMeseScorso = await _dbTicketAperti.GetTicketApertiTwoMonth(userBrandId);
     }
 }
