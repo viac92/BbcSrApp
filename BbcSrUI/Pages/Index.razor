@@ -29,9 +29,9 @@
 }
 else
 {
+    //Dati totale ticket aperti grafico donout
     @foreach (var ticket in tickets)
     {
-
         if (ticket.StatoTicket == "Aperto")
         {
             //ticket aperti
@@ -44,7 +44,7 @@ else
         }
     }
 
-    
+    //Inserisco dati grafico ultimo mese
     Series[0].Data[0] = Convert.ToDouble(ticketAperti[0].TrentaGiorni);
     Series[0].Data[1] = Convert.ToDouble(ticketAperti[0].VentiCinqueGiorni);
     Series[0].Data[2] = Convert.ToDouble(ticketAperti[0].VentiGiorni);
