@@ -7,6 +7,6 @@ namespace DataAccessLibrary
     public interface ITicketApertiDateData
     {
         Task<List<TicketApertiDateModel>> GetTicketApertiLastMonth(int brandId);
-        Task<List<TicketApertiDateModel>> GetTicketApertiTwoMonth(int brandId);
+        Task<List<TicketApertiDateModel>> GetTicketApertiTwoMonth(int brandId);  
     }
 }
