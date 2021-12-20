@@ -35,18 +35,8 @@ else
                 <MudAlert Severity="Severity.Success">Ticket n° @ticket.TicketId - Chiuso</MudAlert>
                     }
                 </MudItem>
-                <MudItem sm="6" xs="12">
+                <MudItem xs="12">
                     <MudText Typo="Typo.h6">Apertura ticket: @String.Format("{0:d}", ticket.OpenTime)</MudText>
-                </MudItem>
-                <MudItem sm="6" xs="12">
-                    @if (ticket.Contact == null)
-                    {
-                        <MudText Typo="Typo.h6">Operatore: Da assegnare</MudText>
-                    }
-                    else
-                    {
-                        <MudText Typo="Typo.h6">Operatore: @ticket.Contact</MudText>
-                    }
                 </MudItem>
                 <MudItem sm="12" xs="12">
                     <MudText Typo="Typo.h6">Store: @ticket.StoreName</MudText>
