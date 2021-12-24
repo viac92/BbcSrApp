@@ -11,6 +11,7 @@
 @inject NavigationManager NavManager
 @inject ITicketNewData _dbTicketNew
 @inject ITicketApertiDateData _dbTicketAperti
+@inject IBannerDate _dbBanner
 
 @*mando Id ticket per il routing*@
 @if (selectedItem1 is not null)
@@ -19,7 +20,7 @@
 }
 
 
-@if (tickets is null || lastTenTickets is null || ticketAperti is null || ticketApertiMeseScorso is null)
+@if (tickets is null || lastTenTickets is null || ticketAperti is null || ticketApertiMeseScorso is null || bannerItems is null)
 {
     <MudGrid Justify="Justify.Center">
         <MudItem Class="mt-5">
@@ -119,20 +120,16 @@ else
             <MudLink Href="tel:+3492356332" Typo="Typo.caption"> 3492356332</MudLink>
             <MudLink Href="mailto:helpdesk@bbctech.it" Typo="Typo.caption">E-mail: helpdesk@bbctech.it</MudLink>
             <MudCarousel Class="mt-5" Style="height:200px;" ShowArrows="true" ShowDelimiters="false" AutoCycle="true" TData="object">
-                <MudCarouselItem Transition="Transition.Slide">
-                    <div class="d-flex" style="height:100%">
-                        <MudItem Class="my-auto mx-auto">
-                            <img src="/image/IposLogo.gif" alt="logo ipos" style="height:auto; width:200px" />
-                        </MudItem>
-                    </div>
-                </MudCarouselItem>
-                <MudCarouselItem Transition="Transition.Slide">
-                    <div class="d-flex" style="height:100%">
-                        <MudItem Class="my-auto mx-auto">
-                            <img src="/image/SmartLogo.gif" alt="logo smart" style="height:auto; width:300px" />
-                        </MudItem>
-                    </div>
-                </MudCarouselItem>
+                @foreach(var bannerItem in bannerItems)
+                 {
+                    <MudCarouselItem Transition="Transition.Slide">
+                        <div class="d-flex" style="height:100%">
+                            <MudItem Class="my-auto mx-auto">
+                                <img src="@bannerItem.SourceImage" alt="@bannerItem.Name" style="height:auto; width:200px" />
+                            </MudItem>
+                        </div>
+                    </MudCarouselItem>
+                 } 
             </MudCarousel>
         </MudPaper>
     </MudItem>
@@ -174,6 +171,9 @@ else
     //scheda Tables
     private TicketNewModel selectedItem1;
 
+    //Banner
+    private IList<BannerModel> bannerItems;
+
 
     protected override async Task OnInitializedAsync()
     {
@@ -190,5 +190,7 @@ else
 
         ticketAperti = await _dbTicketAperti.GetTicketApertiLastMonth(userBrandId);
         ticketApertiMeseScorso = await _dbTicketAperti.GetTicketApertiTwoMonth(userBrandId);
+
+        bannerItems = await _dbBanner.GetBanner();
     }
 }
