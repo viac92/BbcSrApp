@@ -53,7 +53,7 @@ else
                 <MudTd DataLabel="Problema">@context.Subject</MudTd>
         </RowTemplate>
         <PagerContent>
-            <MudTablePager />
+            <MudTablePager RowsPerPageString="Righe per pagina"/>
         </PagerContent>
     </MudTable>   
 }
@@ -77,6 +77,8 @@ else
         if (ticket.StoreName.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         if (ticket.StatoTicket.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if (ticket.TicketId.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
         return false;
     }
