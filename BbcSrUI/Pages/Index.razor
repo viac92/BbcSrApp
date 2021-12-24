@@ -70,33 +70,35 @@ else
         </MudPaper>
     </MudItem>
     <MudItem md="6" sm="12">
-        <MudTable Items="@lastTenTickets" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" Elevation="3" RowsPerPage="4" @bind-SelectedItem="selectedItem1">
-            <ToolBarContent>
-                <MudText Typo="Typo.h6">Ultimi ticket</MudText>
-            </ToolBarContent>
-            <HeaderContent>
-                <MudTh>Numero</MudTh>
-                <MudTh>Problema</MudTh>
-                <MudTh>Stato</MudTh>
-            </HeaderContent>
-            <RowTemplate>
-                <MudTd DataLabel="Numero Ticket">@context.TicketId</MudTd>
-                <MudTd DataLabel="Problema">@context.Subject</MudTd>
-                <MudTd DataLabel="Stato">
-                    @if (context.StatoTicket == "Aperto")
-                    {
-                        <MudAlert Severity="Severity.Error">Aperto</MudAlert>
-                    }
-                    else
-                    {
-                        <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
-                    }
-                </MudTd>
-            </RowTemplate>
-            <PagerContent>
-                <MudTablePager RowsPerPageString="Righe per pagina"/>
-            </PagerContent>
-        </MudTable>
+        <MudPaper Elevation="3" Height="100%">
+            <MudTable Items="@lastTenTickets" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info" RowsPerPage="4" @bind-SelectedItem="selectedItem1" Height="100%" Elevation="0">
+                <ToolBarContent>
+                    <MudText Typo="Typo.h6">Ultimi ticket</MudText>
+                </ToolBarContent>
+                <HeaderContent>
+                    <MudTh>Numero</MudTh>
+                    <MudTh>Problema</MudTh>
+                    <MudTh>Stato</MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="Numero Ticket">@context.TicketId</MudTd>
+                    <MudTd DataLabel="Problema">@context.Subject</MudTd>
+                    <MudTd DataLabel="Stato">
+                        @if (context.StatoTicket == "Aperto")
+                            {
+                            <MudAlert Severity="Severity.Error">Aperto</MudAlert>
+                            }
+                            else
+                            {
+                            <MudAlert Severity="Severity.Success">Chiuso</MudAlert>
+                            }
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager RowsPerPageString="Righe per pagina" HideRowsPerPage="true"/>
+                </PagerContent>
+            </MudTable>
+        </MudPaper>
     </MudItem>
     <MudItem md="6" sm="12">
         <MudPaper Class="pa-5" Elevation="3" Height="100%">
