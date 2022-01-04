@@ -15,7 +15,7 @@ Il progetto è diviso in due soluzioni
 2. Aggiungere la tabella Banner al db di produzione per il corretto inserimento dei banner nella dashboard. 
 3. Migrare le tabelle per il controllo dell'Identity su db di produzione.
 
-#### 1 Inserire la ConnectionString al db di produzione.
+### 1. Inserire la ConnectionString al db di produzione.
 Per inserire la ConnectionString apri il file `appsettings.json`
 
 ```markdown
@@ -32,7 +32,7 @@ e modifica il la stringa come segue:
   }
 ```
 
-#### 2. Aggiungere la tabella Banner al db di produzione per il corretto inserimento dei banner nella dashboard. 
+### 2. Aggiungere la tabella Banner al db di produzione per il corretto inserimento dei banner nella dashboard. 
 
 Per inserire nuovi banner nella dashboard creare la seguente tabella
 ```sql
@@ -52,7 +52,7 @@ Nella tabella banner troviamo:
 
 Una volta completato i banner inseriti verranno visualizzati nel carusel sulla dashboard.
 
-#### 3. Migrare le tabelle per il controllo dell'Identity su db di produzione.
+### 3. Migrare le tabelle per il controllo dell'Identity su db di produzione.
 
 Per poter utilizzare l'Identity framework di Microsoft bisogna eseguire la seguente procedura per effettuare la migrazione di alcune tabelle sul db di produzione dove 
 verranno salvati i dati degli user per authorization/authentication.
