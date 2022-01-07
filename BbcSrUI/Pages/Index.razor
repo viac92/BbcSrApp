@@ -125,7 +125,9 @@ else
                     <MudCarouselItem Transition="Transition.Slide">
                         <div class="d-flex" style="height:100%">
                             <MudItem Class="my-auto mx-auto">
-                                <img src="@bannerItem.SourceImage" alt="@bannerItem.Name" style="height:auto; width:200px" />
+                                <a href="@bannerItem.LinkToSite" target="_blank" rel="noopener noreferrer">
+                                    <img src="@bannerItem.SourceImage" alt="@bannerItem.Name" style="height:auto; width:200px" />
+                                </a>
                             </MudItem>
                         </div>
                     </MudCarouselItem>
